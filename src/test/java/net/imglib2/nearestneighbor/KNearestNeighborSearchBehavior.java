@@ -63,7 +63,6 @@ import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
 import ij.ImageStack;
-import mpicbg.util.Timer;
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
 import net.imglib2.RealPoint;
@@ -83,6 +82,7 @@ import net.imglib2.neighborsearch.NearestNeighborSearchOnKDTree;
 import net.imglib2.type.Type;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
+import tests.Timer;
 
 /**
  * Manual tests for {@link KNearestNeighborSearch}.

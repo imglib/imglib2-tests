@@ -40,7 +40,6 @@ import ij.ImagePlus;
 
 import java.util.Random;
 
-import mpicbg.util.Timer;
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
 import net.imglib2.RealPoint;
@@ -55,6 +54,7 @@ import net.imglib2.neighborsearch.NearestNeighborSearchOnKDTree;
 import net.imglib2.type.Type;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
+import tests.Timer;
 
 /**
  * TODO

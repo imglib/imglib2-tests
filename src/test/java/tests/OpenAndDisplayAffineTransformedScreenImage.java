@@ -32,7 +32,6 @@ import ij.ImagePlus;
 import ij.process.ColorProcessor;
 import io.scif.img.ImgIOException;
 import io.scif.img.ImgOpener;
-import mpicbg.util.Timer;
 import net.imglib2.RandomAccessible;
 import net.imglib2.converter.RealARGBConverter;
 import net.imglib2.display.projector.Projector2D;
@@ -47,6 +46,7 @@ import net.imglib2.realtransform.AffineTransform3D;
 import net.imglib2.type.numeric.ARGBType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.view.Views;
+import tests.Timer;
 
 /**
  * TODO
