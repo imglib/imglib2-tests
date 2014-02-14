@@ -38,25 +38,25 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
+			<groupId>${imglib2.groupId}</groupId>
 			<artifactId>imglib2-algorithms</artifactId>
 			<version>${imglib2.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
+			<groupId>${imglib2.groupId}</groupId>
 			<artifactId>imglib2-algorithms-gpl</artifactId>
 			<version>${imglib2.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
+			<groupId>${imglib2.groupId}</groupId>
 			<artifactId>imglib2-algorithms-legacy</artifactId>
 			<version>${imglib2.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
+			<groupId>${imglib2.groupId}</groupId>
 			<artifactId>imglib2-ij</artifactId>
 			<version>${imglib2.version}</version>
 			<scope>test</scope>
@@ -68,7 +68,7 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
+			<groupId>${imglib2.groupId}</groupId>
 			<artifactId>imglib2-realtransform</artifactId>
 			<version>${imglib2.version}</version>
 			<scope>test</scope>
