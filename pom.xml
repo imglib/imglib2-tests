@@ -24,10 +24,6 @@
 		</license>
 	</licenses>
 
-	<properties>
-		<jama.version>1.0.3</jama.version>
-	</properties>
-
 	<dependencies>
 		<!-- NB: All dependencies for this component are test scope. -->
 
@@ -95,21 +91,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>gov.nist.math</groupId>
-			<artifactId>jama</artifactId>
-			<version>${jama.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>ijaux</groupId>
 			<artifactId>pixlib</artifactId>
 			<version>0.8.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.9</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
