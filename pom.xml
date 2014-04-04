@@ -72,10 +72,10 @@
 
 		<!-- Other SciJava dependencies -->
 		<dependency>
-			<!-- FIXME: NOT IN CENTRAL -->
-			<groupId>${bio-formats.groupId}</groupId>
+			<!-- FIXME: use SCIFIO instead -->
+			<groupId>loci</groupId>
 			<artifactId>loci-common</artifactId>
-			<version>${bio-formats.version}</version>
+			<version>4.4.9</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
