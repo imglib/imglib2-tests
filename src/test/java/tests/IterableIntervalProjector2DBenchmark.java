@@ -10,15 +10,15 @@
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 2 of the 
+ * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public 
+ *
+ * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
  * #L%
@@ -27,24 +27,24 @@
 package tests;
 
 import ij.ImageJ;
+import io.scif.img.ImgIOException;
+import io.scif.img.ImgOpener;
 import net.imglib2.converter.RealARGBConverter;
-import net.imglib2.display.projector.Projector2D;
+import net.imglib2.display.projector.IterableIntervalProjector2D;
 import net.imglib2.exception.IncompatibleTypeException;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgFactory;
 import net.imglib2.img.display.imagej.ImageJFunctions;
-import io.scif.img.ImgIOException;
-import io.scif.img.ImgOpener;
 import net.imglib2.type.numeric.ARGBType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 
-public class XYRandomAccessibleProjectorBenchmark
+public class IterableIntervalProjector2DBenchmark
 {
 	final Img< UnsignedByteType > img;
 
 	final Img< ARGBType > argbImg;
 
-	public XYRandomAccessibleProjectorBenchmark( final String filename ) throws ImgIOException, IncompatibleTypeException
+	public IterableIntervalProjector2DBenchmark( final String filename ) throws ImgIOException, IncompatibleTypeException
 	{
 		// open with ImgOpener using an ArrayImgFactory
 		final ArrayImgFactory< UnsignedByteType > factory = new ArrayImgFactory< UnsignedByteType >();
@@ -55,9 +55,9 @@ public class XYRandomAccessibleProjectorBenchmark
 		ImageJFunctions.show( argbImg );
 	}
 
-	public void convert( final Img< UnsignedByteType > in, final Img< ARGBType > out )
+	public void convert( final Img< UnsignedByteType > in,  final Img< ARGBType > out )
 	{
-		final Projector2D< UnsignedByteType, ARGBType > projector = new Projector2D< UnsignedByteType, ARGBType >( 0, 1, in, out, new RealARGBConverter< UnsignedByteType >(0, 1000) );
+		final IterableIntervalProjector2D< UnsignedByteType, ARGBType > projector = new IterableIntervalProjector2D< UnsignedByteType, ARGBType >( 0, 1,  in, out, new RealARGBConverter< UnsignedByteType >(0, 1000) );
 		for ( int iteration = 0; iteration < 10; ++iteration )
 		{
 			final long start = System.currentTimeMillis();
@@ -71,8 +71,6 @@ public class XYRandomAccessibleProjectorBenchmark
 	public static void main( final String[] args ) throws IncompatibleTypeException, ImgIOException
 	{
 		new ImageJ();
-		new XYRandomAccessibleProjectorBenchmark( "DrosophilaWing.tif" );
+		new IterableIntervalProjector2DBenchmark( "DrosophilaWing.tif" );
 	}
 }
-
-

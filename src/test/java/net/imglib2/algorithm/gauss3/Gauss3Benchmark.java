@@ -10,15 +10,15 @@
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 2 of the 
+ * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public 
+ *
+ * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
  * #L%
@@ -26,7 +26,11 @@
 
 package net.imglib2.algorithm.gauss3;
 
+import io.scif.img.ImgIOException;
+
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import net.imglib2.Point;
 import net.imglib2.RandomAccessible;
@@ -41,7 +45,6 @@ import net.imglib2.img.Img;
 import net.imglib2.img.ImgFactory;
 import net.imglib2.img.array.ArrayImgFactory;
 import net.imglib2.img.display.imagej.ImageJFunctions;
-import io.scif.img.ImgIOException;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.util.BenchmarkHelper;
@@ -86,7 +89,9 @@ public class Gauss3Benchmark
 	{
 		final double[][] halfkernels = Gauss3.halfkernels( sigmas );
 		final int numthreads = Runtime.getRuntime().availableProcessors();
-		SeparableSymmetricConvolution.convolve( halfkernels, source, target, convf, convf,convf, convf, imgf, type, numthreads );
+		final ExecutorService service = Executors.newFixedThreadPool( numthreads );
+		SeparableSymmetricConvolution.convolve( halfkernels, source, target, convf, convf,convf, convf, imgf, type, service );
+		service.shutdown();
 	}
 
 	public static void benchmarkFloat( final long[] dimensions, final double sigma, final boolean printIndividualTimes, final int numRuns) throws ImgIOException
@@ -312,7 +317,9 @@ public class Gauss3Benchmark
 				final RandomAccessibleInterval< FloatType > rOut = new WriteConvertedRandomAccessibleInterval< UnsignedByteType, FloatType >( convolved, new RealFloatSamplerConverter< UnsignedByteType >() );
 				final double[][] halfkernels = Gauss3.halfkernels( sigmas );
 				final int numthreads = Runtime.getRuntime().availableProcessors();
-				SeparableSymmetricConvolution.convolve( halfkernels, Views.extendMirrorSingle( rIn ), rOut, cff, cff, cff, cff, floatFactory, floatType, numthreads );
+				final ExecutorService service = Executors.newFixedThreadPool( numthreads );
+				SeparableSymmetricConvolution.convolve( halfkernels, Views.extendMirrorSingle( rIn ), rOut, cff, cff, cff, cff, floatFactory, floatType, service );
+				service.shutdown();
 			}
 	    } );
 
@@ -327,7 +334,9 @@ public class Gauss3Benchmark
 			    final ConvolverFactory< UnsignedByteType, UnsignedByteType > cii = FloatConvolverRealTypeBuffered.< UnsignedByteType, UnsignedByteType >factory();
 				final double[][] halfkernels = Gauss3.halfkernels( sigmas );
 				final int numthreads = Runtime.getRuntime().availableProcessors();
-				SeparableSymmetricConvolution.convolve( halfkernels, Views.extendMirrorSingle( img ), convolved, cif, cff, cfi, cii, floatFactory, floatType, numthreads );
+				final ExecutorService service = Executors.newFixedThreadPool( numthreads );
+				SeparableSymmetricConvolution.convolve( halfkernels, Views.extendMirrorSingle( img ), convolved, cif, cff, cfi, cii, floatFactory, floatType, service );
+				service.shutdown();
 			}
 	    } );
 	}

@@ -10,21 +10,25 @@
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 2 of the 
+ * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public 
+ *
+ * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
  * #L%
  */
 
 package tests;
+
+import io.scif.img.ImgIOException;
+import io.scif.img.ImgOpener;
+import io.scif.img.ImgUtilityService;
 
 import java.awt.Adjustable;
 import java.awt.Dimension;
@@ -43,16 +47,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.border.TitledBorder;
 
-import loci.common.StatusEvent;
-import loci.common.StatusListener;
 import net.imglib2.converter.RealARGBConverter;
-import net.imglib2.display.projector.Projector2D;
+import net.imglib2.display.projector.IterableIntervalProjector2D;
 import net.imglib2.display.screenimage.awt.ARGBScreenImage;
-import net.imglib2.exception.IncompatibleTypeException;
 import net.imglib2.img.Img;
-import io.scif.img.ImgIOException;
-import io.scif.img.ImgOpener;
-import io.scif.img.ImgUtilityService;
 import net.imglib2.meta.ImgPlus;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.ARGBType;
@@ -73,7 +71,7 @@ public class ImgPanel extends JPanel {
 		public int width, height;
 		public ARGBScreenImage screenImage;
 		public RealARGBConverter<T> converter;
-		public Projector2D<T, ARGBType> projector;
+		public IterableIntervalProjector2D<T, ARGBType> projector;
 
 		public ImgData(final String name, final ImgPlus<T> imgPlus,
 			final ImgPanel owner)
@@ -87,7 +85,7 @@ public class ImgPanel extends JPanel {
 			final int min = 0, max = 255;
 			converter = new RealARGBConverter<T>(min, max);
 			projector =
-				new Projector2D<T, ARGBType>(0, 1, imgPlus, screenImage, converter);
+				new IterableIntervalProjector2D<T, ARGBType>(0, 1, imgPlus, screenImage, converter);
 			projector.map();
 		}
 	}
