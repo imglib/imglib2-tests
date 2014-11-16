@@ -42,9 +42,9 @@ import java.util.Random;
 
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
+import net.imglib2.KDTree;
 import net.imglib2.RealPoint;
-import net.imglib2.collection.KDTree;
-import net.imglib2.collection.RealPointSampleList;
+import net.imglib2.RealPointSampleList;
 import net.imglib2.exception.ImgLibException;
 import net.imglib2.img.imageplus.ImagePlusImg;
 import net.imglib2.img.imageplus.ImagePlusImgFactory;

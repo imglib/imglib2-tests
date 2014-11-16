@@ -92,10 +92,10 @@ public class CopyViews
 		final long[] dim = new long[] { w * 2, h * 2 };
 		Img< FloatType > outputImg = imgFactory.create( dim, new FloatType() );
 		
-		copy( inputImg, Views.superIntervalView( outputImg, new long[] {0,0}, new long[] {w,h} ) );
-		copy( Views.flippedView( inputImg, 0 ), Views.superIntervalView( outputImg, new long[] {w,0}, new long[] {w,h} ) );
-		copy( Views.flippedView( inputImg, 1 ), Views.superIntervalView( outputImg, new long[] {0,h}, new long[] {w,h} ) );
-		copy( Views.flippedView( Views.flippedView( inputImg, 1 ), 0 ), Views.superIntervalView( outputImg, new long[] {w,h}, new long[] {w,h} ) );
+		copy( inputImg, Views.offsetInterval( outputImg, new long[] {0,0}, new long[] {w,h} ) );
+		copy( Views.zeroMin( Views.invertAxis( inputImg, 0 ) ), Views.offsetInterval( outputImg, new long[] {w,0}, new long[] {w,h} ) );
+		copy( Views.zeroMin( Views.invertAxis( inputImg, 1 ) ), Views.offsetInterval( outputImg, new long[] {0,h}, new long[] {w,h} ) );
+		copy( Views.zeroMin( Views.invertAxis( Views.zeroMin( Views.invertAxis( inputImg, 1 ) ), 0 ) ), Views.offsetInterval( outputImg, new long[] {w,h}, new long[] {w,h} ) );
 
 		ImageJFunctions.show( outputImg );
 

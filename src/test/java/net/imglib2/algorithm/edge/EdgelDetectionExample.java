@@ -66,11 +66,15 @@ public class EdgelDetectionExample
 	{
 		final Overlay ov = new Overlay();
 
+		if ( edgels.isEmpty() )
+			return ov;
+			
+		final double[] position = new double[ edgels.get( 0 ).numDimensions() ];
 		for ( final Edgel e : edgels )
 		{
-			final float[] position = e.getPosition();
-			final float[] gradient = e.getGradient();
-			final float magnitude = e.getMagnitude();
+			e.localize( position );
+			final double[] gradient = e.getGradient();
+			final double magnitude = e.getMagnitude();
 
 			final double x0 = position[0] + 0.5 * gradient[1];
 			final double y0 = position[1] - 0.5 * gradient[0];
