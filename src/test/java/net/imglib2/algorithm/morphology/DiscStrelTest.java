@@ -21,10 +21,47 @@ public class DiscStrelTest
 
 	public static void main( final String[] args )
 	{
-		computeError();
+//		computeError();
+//		diskPlot2D( args );
+		testDecompositionPerformance( args );
 	}
 
-	private static final void computeError()
+	public static final void testDecompositionPerformance( final String[] args )
+	{
+		ImageJ.main( args );
+
+		final ArrayImg< UnsignedByteType, ByteArray > img = ArrayImgs.unsignedBytes( 100, 100 );
+		final ArrayRandomAccess< UnsignedByteType > ra = img.randomAccess();
+		ra.setPosition( new long[] { 49, 49 } );
+		ra.get().set( 255 );
+
+		System.out.println( "time(ms)" );
+		System.out.println( "radius\tNo decomp.\t4 PL\t6 PL\t 8PL" );
+		// Warm up
+		MorphologicalOperations.dilate( img, StructuringElements.disk( 1, img.numDimensions(), 0 ), 1 );
+		MorphologicalOperations.dilate( img, StructuringElements.disk( 1, img.numDimensions(), 4 ), 1 );
+		MorphologicalOperations.dilate( img, StructuringElements.disk( 1, img.numDimensions(), 6 ), 1 );
+		MorphologicalOperations.dilate( img, StructuringElements.disk( 1, img.numDimensions(), 8 ), 1 );
+
+		final int[] decomp = new int[] { 0, 4, 6, 8 };
+
+		for ( int i = 0; i < 40; i++ )
+		{
+			final int radius = i * 2 + 1;
+			System.out.print( "" + radius );
+			for ( final int dec : decomp )
+			{
+				final long start = System.currentTimeMillis();
+				final List< Shape > strels = StructuringElements.disk( radius, 2, dec );
+				MorphologicalOperations.dilate( img, strels, 1 );
+				final long end = System.currentTimeMillis();
+				System.out.print( "\t" + ( end - start ) );
+			}
+			System.out.print( "\n" );
+		}
+	}
+
+	public static final void computeError()
 	{
 		final long[] radiuses = new long[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
 		final int[] decomp = new int[] { 4, 6, 8 };
