@@ -10,13 +10,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -65,11 +65,12 @@ import net.imglib2.img.cell.DefaultCell;
 import net.imglib2.img.planar.PlanarCursor;
 import net.imglib2.img.planar.PlanarImg;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
+import net.imglib2.util.Fraction;
 
 /**
  * Tests performance of uint8 image operations with raw byte array, ImageJ,
  * imglib and pixlib libraries.
- * 
+ *
  * @author Curtis Rueden
  * @author Dimiter Prodanov
  */
@@ -405,7 +406,7 @@ public class PerformanceBenchmark {
 		final ByteArray byteAccess = new ByteArray(data);
 		final ArrayImg<UnsignedByteType, ByteArray> array =
 			new ArrayImg<UnsignedByteType, ByteArray>(byteAccess,
-				new long[] { w, h }, 1);
+				new long[] { w, h }, new Fraction());
 		array.setLinkedType(new UnsignedByteType(array));
 		return array;
 	}
@@ -416,7 +417,7 @@ public class PerformanceBenchmark {
 		// return createImage(data, width, height, new PlanarContainerFactory());
 		// NB: Avoid copying the data.
 		final PlanarImg<UnsignedByteType, ByteArray> planarContainer =
-			new PlanarImg<UnsignedByteType, ByteArray>(new long[] { w, h }, 1);
+			new PlanarImg<UnsignedByteType, ByteArray>(new long[] { w, h }, new Fraction());
 		planarContainer.setPlane(0, new ByteArray(data));
 		planarContainer.setLinkedType(new UnsignedByteType(planarContainer));
 		return planarContainer;

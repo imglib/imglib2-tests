@@ -27,6 +27,7 @@
 package net.imglib2.view;
 
 import ij.ImageJ;
+import io.scif.img.ImgOpener;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
@@ -34,7 +35,6 @@ import net.imglib2.img.Img;
 import net.imglib2.img.ImgFactory;
 import net.imglib2.img.array.ArrayImgFactory;
 import net.imglib2.img.display.imagej.ImageJFunctions;
-import io.scif.img.ImgOpener;
 import net.imglib2.type.Type;
 import net.imglib2.type.numeric.real.FloatType;
 
@@ -92,10 +92,10 @@ public class CopyViews
 		final long[] dim = new long[] { w * 2, h * 2 };
 		Img< FloatType > outputImg = imgFactory.create( dim, new FloatType() );
 		
-		copy( inputImg, Views.superIntervalView( outputImg, new long[] {0,0}, new long[] {w,h} ) );
-		copy( Views.flippedView( inputImg, 0 ), Views.superIntervalView( outputImg, new long[] {w,0}, new long[] {w,h} ) );
-		copy( Views.flippedView( inputImg, 1 ), Views.superIntervalView( outputImg, new long[] {0,h}, new long[] {w,h} ) );
-		copy( Views.flippedView( Views.flippedView( inputImg, 1 ), 0 ), Views.superIntervalView( outputImg, new long[] {w,h}, new long[] {w,h} ) );
+		copy( inputImg, Views.offsetInterval( outputImg, new long[] {0,0}, new long[] {w,h} ) );
+		copy( Views.zeroMin( Views.invertAxis( inputImg, 0 ) ), Views.offsetInterval( outputImg, new long[] {w,0}, new long[] {w,h} ) );
+		copy( Views.zeroMin( Views.invertAxis( inputImg, 1 ) ), Views.offsetInterval( outputImg, new long[] {0,h}, new long[] {w,h} ) );
+		copy( Views.zeroMin( Views.invertAxis( Views.zeroMin( Views.invertAxis( inputImg, 1 ) ), 0 ) ), Views.offsetInterval( outputImg, new long[] {w,h}, new long[] {w,h} ) );
 
 		ImageJFunctions.show( outputImg );
 

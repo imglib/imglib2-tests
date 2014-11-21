@@ -10,13 +10,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -64,6 +64,7 @@ import net.imglib2.img.planar.PlanarCursor;
 import net.imglib2.img.planar.PlanarImg;
 import net.imglib2.img.planar.PlanarImgFactory;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
+import net.imglib2.util.Fraction;
 import net.imglib2.util.Util;
 
 /**
@@ -122,7 +123,7 @@ public class ImglibBenchmark {
 			//dimensions = new long[] {50000,50000};
 			//dimensions = new long[] {384,384,384};
 			//dimensions = new long[] {28, 28, 28, 28, 28, 28 };
-			
+
 			dimensions = new long[] {50000,50000};
 		}
 		final ImglibBenchmark bench = new ImglibBenchmark(dimensions, testListImg);
@@ -304,17 +305,17 @@ public class ImglibBenchmark {
 	private void reportMinAvgMax(final long[] min, final long[] max, final long[] avg, final long[][] median, final int iterationCount) {
 		for ( int i = 0; i < avg.length; ++i )
 			avg[ i ] /= iterationCount;
-		
-		
+
+
 
 		System.out.println( "-- SUMMARY --" );
-		System.out.println(METHOD_RAW + " min: " + min[ 0 ] + " avg: " +  avg[ 0 ] + " max: " +  max[ 0 ] + " median: " + Util.computeMedian( median[ 0 ] ) );
-		System.out.println(METHOD_IMAGEJ + " min: " + min[ 1 ] + " avg: " +  avg[ 1 ] + " max: " +  max[ 1 ] + " median: " + Util.computeMedian( median[ 1 ] ) );
-		System.out.println(METHOD_IMGLIB_ARRAY + " min: " + min[ 2 ] + " avg: " +  avg[ 2 ] + " max: " +  max[ 2 ] + " median: " + Util.computeMedian( median[ 2 ] ) );
-		System.out.println(METHOD_IMGLIB_CELL + " min: " + min[ 3 ] + " avg: " +  avg[ 3 ] + " max: " +  max[ 3 ] + " median: " + Util.computeMedian( median[ 3 ] ) );
-		System.out.println(METHOD_IMGLIB_PLANAR + " min: " + min[ 4 ] + " avg: " +  avg[ 4 ] + " max: " +  max[ 4 ] + " median: " + Util.computeMedian( median[ 4 ] ) );
-		System.out.println(METHOD_IMGLIB_IMAGEPLUS + " min: " + min[ 5 ] + " avg: " +  avg[ 5 ] + " max: " +  max[ 5 ] + " median: " + Util.computeMedian( median[ 5 ] ) );
-		System.out.println(METHOD_IMGLIB_LIST + " min: " + min[ 6 ] + " avg: " +  avg[ 6 ] + " max: " +  max[ 6 ] + " median: " + Util.computeMedian( median[ 6 ] ) );
+		System.out.println(METHOD_RAW + " min: " + min[ 0 ] + " avg: " +  avg[ 0 ] + " max: " +  max[ 0 ] + " median: " + Util.median( median[ 0 ] ) );
+		System.out.println(METHOD_IMAGEJ + " min: " + min[ 1 ] + " avg: " +  avg[ 1 ] + " max: " +  max[ 1 ] + " median: " + Util.median( median[ 1 ] ) );
+		System.out.println(METHOD_IMGLIB_ARRAY + " min: " + min[ 2 ] + " avg: " +  avg[ 2 ] + " max: " +  max[ 2 ] + " median: " + Util.median( median[ 2 ] ) );
+		System.out.println(METHOD_IMGLIB_CELL + " min: " + min[ 3 ] + " avg: " +  avg[ 3 ] + " max: " +  max[ 3 ] + " median: " + Util.median( median[ 3 ] ) );
+		System.out.println(METHOD_IMGLIB_PLANAR + " min: " + min[ 4 ] + " avg: " +  avg[ 4 ] + " max: " +  max[ 4 ] + " median: " + Util.median( median[ 4 ] ) );
+		System.out.println(METHOD_IMGLIB_IMAGEPLUS + " min: " + min[ 5 ] + " avg: " +  avg[ 5 ] + " max: " +  max[ 5 ] + " median: " + Util.median( median[ 5 ] ) );
+		System.out.println(METHOD_IMGLIB_LIST + " min: " + min[ 6 ] + " avg: " +  avg[ 6 ] + " max: " +  max[ 6 ] + " median: " + Util.median( median[ 6 ] ) );
 	}
 	private long getMemUsage() {
 		final Runtime r = Runtime.getRuntime();
@@ -488,7 +489,7 @@ public class ImglibBenchmark {
 		if ( data == null )
 			return null;
 		final ByteArray byteAccess = new ByteArray(data);
-		final ArrayImg<UnsignedByteType, ByteArray> array = new ArrayImg<UnsignedByteType, ByteArray>( byteAccess, dimensions, 1 );
+		final ArrayImg<UnsignedByteType, ByteArray> array = new ArrayImg<UnsignedByteType, ByteArray>( byteAccess, dimensions, new Fraction() );
 		array.setLinkedType(new UnsignedByteType(array));
 		return array;
 		//return DevUtil.createImageFromArray(data, new int[] {width, height});
@@ -499,7 +500,7 @@ public class ImglibBenchmark {
 		if ( numDimensions == 2 && data != null )
 		{
 			// NB: Avoid copying the data.
-			final PlanarImg<UnsignedByteType, ByteArray> planarContainer = new PlanarImg<UnsignedByteType, ByteArray>(dimensions, 1);
+			final PlanarImg<UnsignedByteType, ByteArray> planarContainer = new PlanarImg<UnsignedByteType, ByteArray>(dimensions, new Fraction() );
 			planarContainer.setPlane(0, new ByteArray(data));
 			planarContainer.setLinkedType(new UnsignedByteType(planarContainer));
 			return planarContainer;
@@ -508,7 +509,7 @@ public class ImglibBenchmark {
 			return null;
 		if ( dimensions[ 0 ] * dimensions[ 1 ] > Integer.MAX_VALUE )
 			return null;
-		
+
 		@SuppressWarnings( "unchecked" )
 		final
 		PlanarImg<UnsignedByteType, ByteArray> planarContainer = ( PlanarImg<UnsignedByteType, ByteArray> ) createImage( dimensions, new PlanarImgFactory< UnsignedByteType >() );
@@ -517,13 +518,14 @@ public class ImglibBenchmark {
 
 	private CellImg<UnsignedByteType, ByteArray, ?> createCellImage() {
 		final UnsignedByteType type = new UnsignedByteType();
-		final int cellSize = ( int ) Math.pow( Integer.MAX_VALUE / type.getEntitiesPerPixel(), 1.0 / numDimensions );
+		final int cellSize = ( int ) Math.pow( Integer.MAX_VALUE / type.getEntitiesPerPixel().getRatio(), 1.0 / numDimensions );
 
 		// test whether there were rounding errors and cellSize is actually too big
 		long t = 1;
 		for ( int d = 0; d < numDimensions; ++d )
 			t *= cellSize;
-		t *= type.getEntitiesPerPixel();
+		t *= type.getEntitiesPerPixel().getNumerator();
+		t /= type.getEntitiesPerPixel().getDenominator();
 		if ( t > Integer.MAX_VALUE )
 			throw new RuntimeException( "there were rounding errors and cellSize is actually too big" );
 

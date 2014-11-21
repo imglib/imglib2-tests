@@ -51,9 +51,9 @@ public class OpenAndDisplayRotated
 	new ImageJ();
 
 	final ImgOpener io = new ImgOpener();
-	final RandomAccessibleInterval< FloatType > img = Views.rotatedView(
+	final RandomAccessibleInterval< FloatType > img = Views.zeroMin( Views.rotate(
 	        io.openImg( "/home/tobias/workspace/data/73_float.tif", new ArrayImgFactory<FloatType>(), new FloatType()),
-			0, 1 );
+			0, 1 ) );
 
 	final ARGBScreenImage screenImage = new ARGBScreenImage( ( int )img.dimension( 0 ), ( int )img.dimension( 1 ) );
 	final IterableIntervalProjector2D< FloatType, ARGBType > projector = new IterableIntervalProjector2D< FloatType, ARGBType >( 0, 1, img, screenImage, new RealARGBConverter< FloatType >( 0, 127 ) );
