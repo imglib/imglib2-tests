@@ -6,7 +6,7 @@ import ij.ImagePlus;
 
 import java.io.File;
 
-import net.imglib2.algorithm.region.localneighborhood.PairShape;
+import net.imglib2.algorithm.morphology.neighborhoods.PairShape;
 import net.imglib2.algorithm.region.localneighborhood.Shape;
 import net.imglib2.img.ImagePlusAdapter;
 import net.imglib2.img.Img;
@@ -20,7 +20,7 @@ public class PairNeighborhoodTest
 	{
 
 		ImageJ.main( args );
-		final File file = new File( "/Users/tinevez/Desktop/Data/Uneven.tif" );
+		final File file = new File( "/Users/tinevez/Desktop/iconas/Data/Uneven.tif" );
 		// final File file = new File(
 		// "/Users/JeanYves/Desktop/Data/brightblobs.tif" );
 		final ImagePlus imp = IJ.openImage( file.getAbsolutePath() );

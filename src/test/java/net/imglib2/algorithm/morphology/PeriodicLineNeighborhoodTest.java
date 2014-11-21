@@ -9,8 +9,8 @@ import java.io.File;
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccess;
+import net.imglib2.algorithm.morphology.neighborhoods.PeriodicLineShape;
 import net.imglib2.algorithm.region.localneighborhood.Neighborhood;
-import net.imglib2.algorithm.region.localneighborhood.PeriodicLineShape;
 import net.imglib2.algorithm.region.localneighborhood.Shape;
 import net.imglib2.img.ImagePlusAdapter;
 import net.imglib2.img.Img;
@@ -24,7 +24,7 @@ public class PeriodicLineNeighborhoodTest {
 	public static <T extends RealType<T> & NativeType<T>> void main(final String[] args) {
 
 		ImageJ.main(args);
-		final File file = new File("/Users/tinevez/Desktop/Data/Uneven.tif");
+		final File file = new File( "/Users/tinevez/Desktop/iconas/Data/Uneven.tif" );
 		final ImagePlus imp = IJ.openImage(file.getAbsolutePath());
 		final Img<T> img = ImagePlusAdapter.wrap(imp);
 

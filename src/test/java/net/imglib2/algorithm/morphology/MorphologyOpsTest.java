@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.imglib2.RandomAccess;
-import net.imglib2.algorithm.region.localneighborhood.CenteredRectangleShape;
+import net.imglib2.algorithm.morphology.neighborhoods.CenteredRectangleShape;
 import net.imglib2.algorithm.region.localneighborhood.HyperSphereShape;
 import net.imglib2.algorithm.region.localneighborhood.RectangleShape;
 import net.imglib2.algorithm.region.localneighborhood.Shape;
@@ -27,9 +27,9 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 public class MorphologyOpsTest {
 
 	public static void main(final String[] args) {
-		//		weirdTypeTest();
-		//		standardDilate();
-		//		standardErode();
+		weirdTypeTest();
+		standardDilate();
+		standardErode();
 		openAndClose();
 	}
 
