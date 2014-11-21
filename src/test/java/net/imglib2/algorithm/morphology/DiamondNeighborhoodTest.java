@@ -8,7 +8,7 @@ import ij.ImagePlus;
 import java.io.File;
 import java.util.List;
 
-import net.imglib2.algorithm.region.localneighborhood.DiamondShape;
+import net.imglib2.algorithm.morphology.neighborhoods.DiamondShape;
 import net.imglib2.algorithm.region.localneighborhood.Shape;
 import net.imglib2.img.ImagePlusAdapter;
 import net.imglib2.img.Img;
@@ -26,6 +26,15 @@ public class DiamondNeighborhoodTest
 {
 
 	public static void main( final String[] args )
+	{
+//		main0( args ); // Look at strels
+//		main1( args ); // Benchmark 3D case
+//		main3( args ); // Benchmark 2D case
+//		main4( args ); // Simple test on a 8-bit image
+		main7( args ); // Print the decomposition of a 3D strel
+	}
+
+	public static void main0( final String[] args )
 	{
 		ImageJ.main( args );
 		final ArrayImg< UnsignedByteType, ByteArray > img = ArrayImgs.unsignedBytes( 19, 19, 19 );
@@ -165,7 +174,7 @@ public class DiamondNeighborhoodTest
 	{
 
 		ImageJ.main( args );
-		final File file = new File( "/Users/tinevez/Desktop/Data/Uneven.tif" );
+		final File file = new File( "/Users/tinevez/Desktop/iconas/Data/Uneven.tif" );
 		// final File file = new File(
 		// "/Users/JeanYves/Desktop/Data/brightblobs.tif" );
 		final ImagePlus imp = IJ.openImage( file.getAbsolutePath() );
