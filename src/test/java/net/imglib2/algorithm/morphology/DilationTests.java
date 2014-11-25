@@ -2,17 +2,18 @@ package net.imglib2.algorithm.morphology;
 
 import ij.ImageJ;
 import io.scif.img.ImgIOException;
-import io.scif.img.ImgOpener;
-import io.scif.img.SCIFIOImgPlus;
 
-import java.util.List;
+import java.util.Random;
 
 import net.imglib2.FinalInterval;
 import net.imglib2.Interval;
 import net.imglib2.algorithm.morphology.neighborhoods.DiamondShape;
 import net.imglib2.algorithm.region.localneighborhood.Shape;
 import net.imglib2.img.Img;
-import net.imglib2.img.array.ArrayImgFactory;
+import net.imglib2.img.array.ArrayImg;
+import net.imglib2.img.array.ArrayImgs;
+import net.imglib2.img.array.ArrayRandomAccess;
+import net.imglib2.img.basictypeaccess.array.FloatArray;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.IntervalView;
@@ -22,10 +23,24 @@ public class DilationTests
 {
 	public static void main( final String[] args ) throws ImgIOException
 	{
-		final String fn = "DrosophilaWing.tif";
-		final List< SCIFIOImgPlus< FloatType >> imgs = new ImgOpener().openImgs( fn, new ArrayImgFactory< FloatType >(), new FloatType() );
-		final Img< FloatType > img = imgs.get( 0 ).getImg();
-		final Shape strel = new DiamondShape( 5 );
+		// final String fn = "DrosophilaWing.tif";
+		// final List< SCIFIOImgPlus< FloatType >> imgs = new
+		// ImgOpener().openImgs( fn, new ArrayImgFactory< FloatType >(), new
+		// FloatType() );
+		// final Img< FloatType > img = imgs.get( 0 ).getImg();
+
+		final ArrayImg< FloatType, FloatArray > img = ArrayImgs.floats( new long[] { 800, 600 } );
+		final ArrayRandomAccess< FloatType > ra = img.randomAccess();
+		final Random ran = new Random( 1l );
+		for ( int i = 0; i < 100; i++ )
+		{
+			final int x = ran.nextInt( ( int ) img.dimension( 0 ) );
+			final int y = ran.nextInt( ( int ) img.dimension( 1 ) );
+			ra.setPosition( new int[] { x, y } );
+			ra.get().set( 255f );
+		}
+
+		final Shape strel = new DiamondShape( 9 );
 		final FloatType minVal = new FloatType( 0 );
 
 		ImageJ.main( args );
@@ -49,7 +64,7 @@ public class DilationTests
 		ImageJFunctions.show( img4, "DilatedToNewImgFULL" );
 
 		// Dilate in place
-		final Interval interval = FinalInterval.createMinSize( new long[] { 600, 4, 185, 100 } );
+		final Interval interval = FinalInterval.createMinSize( new long[] { 100, -10, 200, 200 } );
 		Dilation.dilateInPlace( img, interval, strel, minVal, 1 );
 		ImageJFunctions.show( img, "DilatedInPlace" );
 
