@@ -14,7 +14,9 @@ import net.imglib2.img.array.ArrayImg;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.img.array.ArrayRandomAccess;
 import net.imglib2.img.basictypeaccess.array.FloatArray;
+import net.imglib2.img.basictypeaccess.array.LongArray;
 import net.imglib2.img.display.imagej.ImageJFunctions;
+import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
@@ -23,6 +25,16 @@ public class DilationTests
 {
 	public static void main( final String[] args ) throws ImgIOException
 	{
+		show( args );
+		benchmark( args );
+	}
+
+	public static void show( final String[] args ) throws ImgIOException
+	{
+		ImageJ.main( args );
+		final Shape strel = new DiamondShape( 9 );
+		final FloatType minVal = new FloatType( 0 );
+
 		// final String fn = "DrosophilaWing.tif";
 		// final List< SCIFIOImgPlus< FloatType >> imgs = new
 		// ImgOpener().openImgs( fn, new ArrayImgFactory< FloatType >(), new
@@ -40,10 +52,6 @@ public class DilationTests
 			ra.get().set( 255f );
 		}
 
-		final Shape strel = new DiamondShape( 9 );
-		final FloatType minVal = new FloatType( 0 );
-
-		ImageJ.main( args );
 		ImageJFunctions.show( img, "Source" );
 
 		// Dilate to provided target
@@ -69,5 +77,76 @@ public class DilationTests
 		ImageJFunctions.show( img, "DilatedInPlace" );
 
 		ImageJFunctions.show( img, "SourceAgain" );
+
+		/*
+		 * Binary type
+		 */
+
+		final ArrayImg< BitType, LongArray > bitsImg = ArrayImgs.bits( new long[] { 800, 600 } );
+
+		final ArrayRandomAccess< BitType > raBits = bitsImg.randomAccess(); // LOL
+		final Random ran2 = new Random( 1l );
+		for ( int i = 0; i < 100; i++ )
+		{
+			final int x = ran2.nextInt( ( int ) bitsImg.dimension( 0 ) );
+			final int y = ran2.nextInt( ( int ) bitsImg.dimension( 1 ) );
+			raBits.setPosition( new int[] { x, y } );
+			raBits.get().set( true );
+		}
+		ImageJFunctions.show( bitsImg, "BitsSource" );
+
+		// Dilate to new image
+		final Img< BitType > imgBits3 = Dilation.dilate( bitsImg, strel, 1 );
+		ImageJFunctions.show( imgBits3, "BitsDilatedToNewImg" );
+
+	}
+
+	public static final void benchmark( final String[] args )
+	{
+		final int ntrials = 10;
+
+		final Shape strel = new DiamondShape( 3 );
+
+		final ArrayImg< FloatType, FloatArray > img = ArrayImgs.floats( new long[] { 200, 200 } );
+		final ArrayRandomAccess< FloatType > ra = img.randomAccess();
+
+		final ArrayImg< BitType, LongArray > bitsImg = ArrayImgs.bits( new long[] { img.dimension( 0 ), img.dimension( 1 ) } );
+		final ArrayRandomAccess< BitType > raBits = bitsImg.randomAccess(); // LOL
+
+		final Random ran = new Random( 1l );
+		for ( int i = 0; i < 1000; i++ )
+		{
+			final int x = ran.nextInt( ( int ) img.dimension( 0 ) );
+			final int y = ran.nextInt( ( int ) img.dimension( 1 ) );
+
+			ra.setPosition( new int[] { x, y } );
+			ra.get().set( 1f );
+
+			raBits.setPosition( ra );
+			raBits.get().set( true );
+		}
+
+		// Dilate to new image
+		Img< BitType > imgBits3 = Dilation.dilate( bitsImg, strel, 1 );
+		long start = System.currentTimeMillis();
+		for ( int i = 0; i < ntrials; i++ )
+		{
+			imgBits3 = Dilation.dilate( bitsImg, strel, 1 );
+		}
+		long end = System.currentTimeMillis();
+		System.out.println( "BitType time: " + ( ( end - start ) / ntrials ) + " ms." );
+
+		Img< FloatType > img3 = Dilation.dilate( img, strel, 1 );
+		start = System.currentTimeMillis();
+		for ( int i = 0; i < ntrials; i++ )
+		{
+			img3 = Dilation.dilate( img, strel, 1 );
+		}
+		end = System.currentTimeMillis();
+		System.out.println( "FloatType time: " + ( ( end - start ) / ntrials ) + " ms." );
+
+		ImageJ.main( args );
+		ImageJFunctions.show( img3, "Float" );
+		ImageJFunctions.show( imgBits3, "Bit" );
 	}
 }
