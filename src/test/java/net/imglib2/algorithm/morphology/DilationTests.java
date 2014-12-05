@@ -3,6 +3,7 @@ package net.imglib2.algorithm.morphology;
 import ij.ImageJ;
 import io.scif.img.ImgIOException;
 
+import java.util.List;
 import java.util.Random;
 
 import net.imglib2.FinalInterval;
@@ -25,8 +26,73 @@ public class DilationTests
 {
 	public static void main( final String[] args ) throws ImgIOException
 	{
-		show( args );
-		benchmark( args );
+//		show( args );
+//		benchmark( args );
+		chain( args );
+	}
+
+	private static void chain( final String[] args )
+	{
+		ImageJ.main( args );
+
+		final List< Shape > strel = StructuringElements.disk( 6, 2, 4 );
+		for ( final Shape shape : strel )
+		{
+			System.out.println( shape );
+			System.out.println( MorphologyUtils.printNeighborhood( shape, 2 ) );
+
+		}
+		final FloatType minVal = new FloatType( 0f );
+
+		final ArrayImg< FloatType, FloatArray > img = ArrayImgs.floats( new long[] { 200, 200 } );
+		final ArrayImg< BitType, LongArray > bitsImg = ArrayImgs.bits( new long[] { img.dimension( 0 ), img.dimension( 1 ) } );
+		final ArrayRandomAccess< FloatType > ra = img.randomAccess();
+		final ArrayRandomAccess< BitType > raBits = bitsImg.randomAccess(); // LOL
+		final Random ran = new Random( 1l );
+		for ( int i = 0; i < 100; i++ )
+		{
+			final int x = ran.nextInt( ( int ) img.dimension( 0 ) );
+			final int y = ran.nextInt( ( int ) img.dimension( 1 ) );
+			ra.setPosition( new int[] { x, y } );
+			ra.get().set( 255f );
+			raBits.setPosition( new int[] { x, y } );
+			raBits.get().set( true );
+		}
+		ImageJFunctions.show( img, "Source" );
+
+//		// Dilate to provided target
+//		final Interval interval2 = FinalInterval.createMinSize( new long[] { 50, 50, 85, 50 } );
+//		final Img< FloatType > img2 = img.factory().create( interval2, new FloatType() );
+//		final long[] translation = new long[ interval2.numDimensions() ];
+//		interval2.min( translation );
+//		final IntervalView< FloatType > translate = Views.translate( img2, translation );
+//		Dilation.dilate( img, translate, strel, minVal, 1 );
+//		ImageJFunctions.show( img2, "DilatedToTarget" );
+
+//		// Dilate to new image
+//		final Img< FloatType > img3 = Dilation.dilate( img, strel, minVal, 1 );
+//		ImageJFunctions.show( img3, "DilatedToNewImg" );
+
+		// Dilate to new image FULL version.
+		final Img< FloatType > img4 = Dilation.dilateFull( img, strel, minVal, 1 );
+		ImageJFunctions.show( img4, "DilatedToNewImgFULL" );
+
+//		// Dilate in place
+//		final Interval interval = FinalInterval.createMinSize( new long[] { 100, -10, 80, 100 } );
+//		Dilation.dilateInPlace( img, interval, strel, minVal, 1 );
+//		ImageJFunctions.show( img, "DilatedInPlace" );
+//
+//		ImageJFunctions.show( img, "SourceAgain" );
+//
+//		/*
+//		 * Binary type
+//		 */
+//
+//		ImageJFunctions.show( bitsImg, "BitsSource" );
+//
+//		// Dilate to new image
+//		final Img< BitType > imgBits3 = Dilation.dilate( bitsImg, strel, 1 );
+//		ImageJFunctions.show( imgBits3, "BitsDilatedToNewImg" );
 	}
 
 	public static void show( final String[] args ) throws ImgIOException
