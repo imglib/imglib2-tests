@@ -143,7 +143,7 @@ public class RectangleStructuringElementPerformanceTest
 		final int[] radii = new int[ img.numDimensions() ];
 		Arrays.fill( radii, radius );
 		final List< Shape > strels = StructuringElements.rectangle( radii, optimize );
-		final Img< UnsignedByteType > dilated = MorphologicalOperations.dilate( img, strels, numThreads );
+		final Img< UnsignedByteType > dilated = Dilation.dilate( img, strels, numThreads );
 		final long end = System.currentTimeMillis();
 		return new Object[] { Long.valueOf( end - start ), dilated };
 	}

@@ -42,8 +42,8 @@ public class MorphologyOpsTest {
 		}
 
 		final Shape strel = new HyperSphereShape(3);
-		final Img<UnsignedByteType> open = MorphologicalOperations.open(img, strel, 4);
-		final Img<UnsignedByteType> closed = MorphologicalOperations.close(img, strel, 4);
+		final Img< UnsignedByteType > open = Opening.open( img, strel, 4 );
+		final Img< UnsignedByteType > closed = Closing.close( img, strel, 4 );
 
 		new ImageJ();
 		ImageJFunctions.show(img);
@@ -62,8 +62,8 @@ public class MorphologyOpsTest {
 
 		final Shape strel = new CenteredRectangleShape(new int[] { 3, 2 }, false);
 		// final Shape strel = new HyperSphereShape(radius)
-		final Img<UnsignedByteType> full = MorphologicalOperations.erodeFull(img, strel, 4);
-		final Img<UnsignedByteType> std = MorphologicalOperations.erode(img, strel, 4);
+		final Img< UnsignedByteType > full = Erosion.erodeFull( img, strel, 4 );
+		final Img< UnsignedByteType > std = Erosion.erode( img, strel, 4 );
 
 		new ImageJ();
 		ImageJFunctions.show(img);
@@ -79,8 +79,8 @@ public class MorphologyOpsTest {
 
 		final Shape strel = new CenteredRectangleShape(new int[] { 5, 2 }, true);
 		// final Shape strel = new HyperSphereShape(radius)
-		final Img<UnsignedByteType> full = MorphologicalOperations.dilateFull(img, strel, new UnsignedByteType(0), 4);
-		final Img<UnsignedByteType> std = MorphologicalOperations.dilate(img, strel, new UnsignedByteType(0), 4);
+		final Img< UnsignedByteType > full = Dilation.dilateFull( img, strel, new UnsignedByteType( 0 ), 4 );
+		final Img< UnsignedByteType > std = Dilation.dilate( img, strel, new UnsignedByteType( 0 ), 4 );
 
 		new ImageJ();
 		ImageJFunctions.show(img);
@@ -107,10 +107,10 @@ public class MorphologyOpsTest {
 
 		System.out.println("Before:\n" + toString(img, 14));
 		System.out.println();
-		final Img<StringType> dilatedFull = MorphologicalOperations.dilateFull(img, new RectangleShape(1, false), new StringType(""), 2);
+		final Img< StringType > dilatedFull = Dilation.dilateFull( img, new RectangleShape( 1, false ), new StringType( "" ), 2 );
 		System.out.println("After full:\n" + toString(dilatedFull, 14));
 		System.out.println();
-		final Img<StringType> dilated = MorphologicalOperations.dilate(img, new RectangleShape(1, false), new StringType(""), 2);
+		final Img< StringType > dilated = Dilation.dilate( img, new RectangleShape( 1, false ), new StringType( "" ), 2 );
 		System.out.println("After std:\n" + toString(dilated, 14));
 
 	}

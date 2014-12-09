@@ -21,8 +21,8 @@ public class DiscStrelTest
 
 	public static void main( final String[] args )
 	{
-//		computeError();
-//		diskPlot2D( args );
+		computeError();
+		diskPlot2D( args );
 		testDecompositionPerformance( args );
 	}
 
@@ -38,10 +38,10 @@ public class DiscStrelTest
 		System.out.println( "time(ms)" );
 		System.out.println( "radius\tNo decomp.\t4 PL\t6 PL\t 8PL" );
 		// Warm up
-		MorphologicalOperations.dilate( img, StructuringElements.disk( 1, img.numDimensions(), 0 ), 1 );
-		MorphologicalOperations.dilate( img, StructuringElements.disk( 1, img.numDimensions(), 4 ), 1 );
-		MorphologicalOperations.dilate( img, StructuringElements.disk( 1, img.numDimensions(), 6 ), 1 );
-		MorphologicalOperations.dilate( img, StructuringElements.disk( 1, img.numDimensions(), 8 ), 1 );
+		Dilation.dilate( img, StructuringElements.disk( 1, img.numDimensions(), 0 ), 1 );
+		Dilation.dilate( img, StructuringElements.disk( 1, img.numDimensions(), 4 ), 1 );
+		Dilation.dilate( img, StructuringElements.disk( 1, img.numDimensions(), 6 ), 1 );
+		Dilation.dilate( img, StructuringElements.disk( 1, img.numDimensions(), 8 ), 1 );
 
 		final int[] decomp = new int[] { 0, 4, 6, 8 };
 
@@ -53,7 +53,7 @@ public class DiscStrelTest
 			{
 				final long start = System.currentTimeMillis();
 				final List< Shape > strels = StructuringElements.disk( radius, 2, dec );
-				MorphologicalOperations.dilate( img, strels, 1 );
+				Dilation.dilate( img, strels, 1 );
 				final long end = System.currentTimeMillis();
 				System.out.print( "\t" + ( end - start ) );
 			}
@@ -71,11 +71,11 @@ public class DiscStrelTest
 		{
 			System.out.print( "" + radius + "\t" );
 			final List< Shape > disk0 = StructuringElements.disk( radius, source.numDimensions(), 0 );
-			final Img< UnsignedByteType > ref = MorphologicalOperations.dilate( source, disk0, 1 );
+			final Img< UnsignedByteType > ref = Dilation.dilate( source, disk0, 1 );
 			for ( final int n : decomp )
 			{
 				final List< Shape > disk = StructuringElements.disk( radius, source.numDimensions(), n );
-				final Img< UnsignedByteType > out = MorphologicalOperations.dilate( source, disk, 1 );
+				final Img< UnsignedByteType > out = Dilation.dilate( source, disk, 1 );
 				final double[] error = error( out, ref );
 				System.out.print( String.format( "%5.3f\t", error[ 0 ] ) );
 			}
@@ -138,7 +138,7 @@ public class DiscStrelTest
 			for ( final long radius : radiuses )
 			{
 				final List< Shape > disc = StructuringElements.disk( radius, source.numDimensions(), n );
-				final Img< UnsignedByteType > out = MorphologicalOperations.dilate( source, disc, 1 );
+				final Img< UnsignedByteType > out = Dilation.dilate( source, disc, 1 );
 				copyToSlice( out, target, rindex++ );
 			}
 

@@ -27,10 +27,10 @@ public class DiamondNeighborhoodTest
 
 	public static void main( final String[] args )
 	{
-//		main0( args ); // Look at strels
-//		main1( args ); // Benchmark 3D case
-//		main3( args ); // Benchmark 2D case
-//		main4( args ); // Simple test on a 8-bit image
+		main0( args ); // Look at strels
+		main1( args ); // Benchmark 3D case
+		main3( args ); // Benchmark 2D case
+		main4( args ); // Simple test on a 8-bit image
 		main7( args ); // Print the decomposition of a 3D strel
 	}
 
@@ -46,9 +46,9 @@ public class DiamondNeighborhoodTest
 		for ( final int radius : radiuses )
 		{
 			final List< Shape > strelStd = StructuringElements.diamond( radius, img.numDimensions(), false );
-			final Img< UnsignedByteType > std = MorphologicalOperations.dilate( img, strelStd, 1 );
+			final Img< UnsignedByteType > std = Dilation.dilate( img, strelStd, 1 );
 			final List< Shape > strelOpt = StructuringElements.diamond( radius, img.numDimensions(), true );
-			final Img< UnsignedByteType > opt = MorphologicalOperations.dilate( img, strelOpt, 1 );
+			final Img< UnsignedByteType > opt = Dilation.dilate( img, strelOpt, 1 );
 
 			ImageJFunctions.show( std, "Std " + radius );
 			ImageJFunctions.show( opt, "Opt " + radius );
@@ -68,13 +68,13 @@ public class DiamondNeighborhoodTest
 		System.out.println( "Full strel" );
 		System.out.println( "radius\ttime(ms)" );
 		// Warm up
-		MorphologicalOperations.dilate( img, StructuringElements.diamond( 1, img.numDimensions(), false ), 1 );
-		MorphologicalOperations.dilate( img, StructuringElements.diamond( 1, img.numDimensions(), false ), 1 );
+		Dilation.dilate( img, StructuringElements.diamond( 1, img.numDimensions(), false ), 1 );
+		Dilation.dilate( img, StructuringElements.diamond( 1, img.numDimensions(), false ), 1 );
 		for ( int i = 1; i < 19; i++ )
 		{
 			final long start = System.currentTimeMillis();
 			final List< Shape > strels = StructuringElements.diamond( i, img.numDimensions(), false );
-			MorphologicalOperations.dilate( img, strels, 1 );
+			Dilation.dilate( img, strels, 1 );
 			final long end = System.currentTimeMillis();
 			System.out.println( "" + i + '\t' + ( end - start ) );
 		}
@@ -82,13 +82,13 @@ public class DiamondNeighborhoodTest
 		System.out.println( "Decomposed strel" );
 		System.out.println( "radius\ttime(ms)" );
 		// Warm up
-		MorphologicalOperations.dilate( img, StructuringElements.diamond( 1, img.numDimensions(), true ), 1 );
-		MorphologicalOperations.dilate( img, StructuringElements.diamond( 1, img.numDimensions(), true ), 1 );
+		Dilation.dilate( img, StructuringElements.diamond( 1, img.numDimensions(), true ), 1 );
+		Dilation.dilate( img, StructuringElements.diamond( 1, img.numDimensions(), true ), 1 );
 		for ( int i = 1; i < 19; i++ )
 		{
 			final long start = System.currentTimeMillis();
 			final List< Shape > strels = StructuringElements.diamond( i, img.numDimensions(), true );
-			MorphologicalOperations.dilate( img, strels, 1 );
+			Dilation.dilate( img, strels, 1 );
 			final long end = System.currentTimeMillis();
 			System.out.println( "" + i + '\t' + ( end - start ) );
 		}
@@ -116,7 +116,7 @@ public class DiamondNeighborhoodTest
 		{
 			final String str = MorphologyUtils.printNeighborhood( strel, img.numDimensions() );
 			System.out.println( str );
-			dilated = MorphologicalOperations.dilate( dilated, strel, 1 );
+			dilated = Dilation.dilate( dilated, strel, 1 );
 			ImageJFunctions.show( dilated, "Decomposed strel: " + strel );
 		}
 
@@ -141,13 +141,13 @@ public class DiamondNeighborhoodTest
 		System.out.println( "Full strel" );
 		System.out.println( "radius\ttime(ms)" );
 		// Warm up
-		MorphologicalOperations.dilate( img, StructuringElements.diamond( 1, img.numDimensions(), false ), 1 );
-		MorphologicalOperations.dilate( img, StructuringElements.diamond( 1, img.numDimensions(), false ), 1 );
+		Dilation.dilate( img, StructuringElements.diamond( 1, img.numDimensions(), false ), 1 );
+		Dilation.dilate( img, StructuringElements.diamond( 1, img.numDimensions(), false ), 1 );
 		for ( int i = 0; i < 40; i++ )
 		{
 			final long start = System.currentTimeMillis();
 			final List< Shape > strels = StructuringElements.diamond( i, img.numDimensions(), false );
-			MorphologicalOperations.dilate( img, strels, 1 );
+			Dilation.dilate( img, strels, 1 );
 			final long end = System.currentTimeMillis();
 			System.out.println( "" + i + '\t' + ( end - start ) );
 		}
@@ -155,13 +155,13 @@ public class DiamondNeighborhoodTest
 		System.out.println( "Decomposed strel" );
 		System.out.println( "radius\ttime(ms)" );
 		// Warm up
-		MorphologicalOperations.dilate( img, StructuringElements.diamond( 1, img.numDimensions(), true ), 1 );
-		MorphologicalOperations.dilate( img, StructuringElements.diamond( 1, img.numDimensions(), true ), 1 );
+		Dilation.dilate( img, StructuringElements.diamond( 1, img.numDimensions(), true ), 1 );
+		Dilation.dilate( img, StructuringElements.diamond( 1, img.numDimensions(), true ), 1 );
 		for ( int i = 0; i < 40; i++ )
 		{
 			final long start = System.currentTimeMillis();
 			final List< Shape > strels = StructuringElements.diamond( i, img.numDimensions(), true );
-			MorphologicalOperations.dilate( img, strels, 1 );
+			Dilation.dilate( img, strels, 1 );
 			final long end = System.currentTimeMillis();
 			System.out.println( "" + i + '\t' + ( end - start ) );
 		}

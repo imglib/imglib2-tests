@@ -26,7 +26,7 @@ public class DiamondTipsNeighborhoodTest
 		final long start = System.currentTimeMillis();
 
 		final Shape shape = new DiamondTipsShape( 10 );
-		final Img< T > target = MorphologicalOperations.dilate( img, shape, 1 );
+		final Img< T > target = Dilation.dilate( img, shape, 1 );
 
 		final long end = System.currentTimeMillis();
 

@@ -143,7 +143,7 @@ public class SquareStructuringElementPerformanceTest
 	{
 		final long start = System.currentTimeMillis();
 		final List< Shape > strels = StructuringElements.square( radius, img.numDimensions(), optimize );
-		final Img< UnsignedByteType > dilated = MorphologicalOperations.dilate( img, strels, numThreads );
+		final Img< UnsignedByteType > dilated = Dilation.dilate( img, strels, numThreads );
 		final long end = System.currentTimeMillis();
 		return new Object[] { Long.valueOf( end - start ), dilated };
 	}

@@ -29,7 +29,7 @@ public class PairNeighborhoodTest
 		final long start = System.currentTimeMillis();
 
 		final Shape shape = new PairShape( new long[] { -10, 20 } );
-		final Img< T > target = MorphologicalOperations.dilate( img, shape, 1 );
+		final Img< T > target = Dilation.dilate( img, shape, 1 );
 
 		final long end = System.currentTimeMillis();
 
@@ -39,11 +39,11 @@ public class PairNeighborhoodTest
 		ImageJFunctions.show( target );
 
 		final Shape shape2 = new PairShape( new long[] { 10, -20 } );
-		final Img< T > target2 = MorphologicalOperations.dilate( img, shape2, 1 );
+		final Img< T > target2 = Dilation.dilate( img, shape2, 1 );
 		ImageJFunctions.show( target2 );
 
 		final Shape shape3 = new PairShape( new long[] { 10, 20 } );
-		final Img< T > target3 = MorphologicalOperations.dilate( img, shape3, 1 );
+		final Img< T > target3 = Dilation.dilate( img, shape3, 1 );
 		ImageJFunctions.show( target3 );
 
 	}
