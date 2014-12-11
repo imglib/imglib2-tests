@@ -3,7 +3,6 @@ package net.imglib2.algorithm.morphology;
 import ij.ImageJ;
 import io.scif.img.ImgIOException;
 
-import java.util.List;
 import java.util.Random;
 
 import net.imglib2.FinalInterval;
@@ -14,10 +13,12 @@ import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImg;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.img.array.ArrayRandomAccess;
+import net.imglib2.img.basictypeaccess.array.ByteArray;
 import net.imglib2.img.basictypeaccess.array.FloatArray;
 import net.imglib2.img.basictypeaccess.array.LongArray;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.type.logic.BitType;
+import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
@@ -27,7 +28,7 @@ public class ErosionTests
 	public static void main( final String[] args ) throws ImgIOException
 	{
 //		show( args );
-		benchmark( args );
+//		benchmark( args );
 		chain( args );
 	}
 
@@ -35,73 +36,50 @@ public class ErosionTests
 	{
 		ImageJ.main( args );
 
-		final List< Shape > strel = StructuringElements.disk( 6, 2, 4 );
-		for ( final Shape shape : strel )
+		final ArrayImg< UnsignedByteType, ByteArray > img = ArrayImgs.unsignedBytes( 50l, 50l );
+		for ( final UnsignedByteType pixel : img )
 		{
-			System.out.println( shape );
-			System.out.println( MorphologyUtils.printNeighborhood( shape, 2 ) );
+			pixel.set( 255 );
 		}
-		final FloatType maxVal = new FloatType( Float.POSITIVE_INFINITY );
+		final ArrayRandomAccess< UnsignedByteType > randomAccess = img.randomAccess();
+		randomAccess.setPosition( new int[] { 0, 25 } );
+		randomAccess.get().set( 0 );
+		randomAccess.setPosition( new int[] { 35, 25 } );
+		randomAccess.get().set( 0 );
 
-		final ArrayImg< FloatType, FloatArray > img = ArrayImgs.floats( new long[] { 200, 200 } );
-		for ( final FloatType pixel : img )
-		{
-			pixel.set( 1f );
-		}
-
-		final ArrayImg< BitType, LongArray > bitsImg = ArrayImgs.bits( new long[] { img.dimension( 0 ), img.dimension( 1 ) } );
-		for ( final BitType pixelB : bitsImg )
-		{
-			pixelB.set( true );
-		}
-
-		final ArrayRandomAccess< FloatType > ra = img.randomAccess();
-		final ArrayRandomAccess< BitType > raBits = bitsImg.randomAccess(); // LOL
-		final Random ran = new Random( 1l );
-		for ( int i = 0; i < 100; i++ )
-		{
-			final int x = ran.nextInt( ( int ) img.dimension( 0 ) );
-			final int y = ran.nextInt( ( int ) img.dimension( 1 ) );
-			ra.setPosition( new int[] { x, y } );
-			ra.get().set( 0f );
-			raBits.setPosition( new int[] { x, y } );
-			raBits.get().set( false );
-		}
+		final DiamondShape diamondShape = new DiamondShape( 8 );
 		ImageJFunctions.show( img, "Source" );
 
-		// Dilate to provided target
-		final Interval interval2 = FinalInterval.createMinSize( new long[] { 50, 50, 85, 50 } );
-		final Img< FloatType > img2 = img.factory().create( interval2, new FloatType() );
-		final long[] translation = new long[ interval2.numDimensions() ];
-		interval2.min( translation );
-		final IntervalView< FloatType > translate = Views.translate( img2, translation );
-		Erosion.erode( img, translate, strel, maxVal, 1 );
-		ImageJFunctions.show( img2, "ErodedToTarget" );
+		// New Source
+		ImageJFunctions.show( Erosion.erode( img, StructuringElements.diamond( 8, 2, true ), 1 ), "NewSourceDecomp" );
+		ImageJFunctions.show( Erosion.erode( img, StructuringElements.diamond( 8, 2, false ), 1 ), "NewSourceStraight" );
+		ImageJFunctions.show( Erosion.erode( img, diamondShape, 1 ), "NewSourceSingle" );
 
-		// Dilate to new image
-		final Img< FloatType > img3 = Erosion.erode( img, strel, maxVal, 1 );
-		ImageJFunctions.show( img3, "ErodedToNewImg" );
+		// Full
+		ImageJFunctions.show( Erosion.erodeFull( img, StructuringElements.diamond( 8, 2, true ), 1 ), "NewFullSourceDecomp" );
+		ImageJFunctions.show( Erosion.erodeFull( img, StructuringElements.diamond( 8, 2, false ), 1 ), "NewFullSourceStraight" );
+		ImageJFunctions.show( Erosion.erodeFull( img, diamondShape, 1 ), "NewFullSourceSingle" );
 
-		// Dilate to new image FULL version.
-		final Img< FloatType > img4 = Erosion.erodeFull( img, strel, maxVal, 1 );
-		ImageJFunctions.show( img4, "ErodedToNewImgFULL" );
+		// To target
+		final Interval interval = FinalInterval.createMinSize( 10, 10, 20, 20 );
+		final long[] min = new long[ interval.numDimensions() ];
+		interval.min( min );
 
-		// Dilate in place
-		final Interval interval = FinalInterval.createMinSize( new long[] { 100, -10, 80, 100 } );
-		Erosion.erodeInPlace( img, interval, strel, maxVal, 1 );
-		ImageJFunctions.show( img, "ErodedInPlace" );
+		final Img< UnsignedByteType > result1 = img.factory().create( interval, img.firstElement().copy() );
+		final IntervalView< UnsignedByteType > target1 = Views.translate( result1, min );
+		Erosion.erode( img, target1, StructuringElements.diamond( 8, 2, true ), 1 );
+		ImageJFunctions.show( result1, "ToTargetDecomp" );
 
-		ImageJFunctions.show( img, "SourceAgain" );
+		final Img< UnsignedByteType > result2 = img.factory().create( interval, img.firstElement().copy() );
+		final IntervalView< UnsignedByteType > target2 = Views.translate( result2, min );
+		Erosion.erode( img, target2, StructuringElements.diamond( 8, 2, false ), 1 );
+		ImageJFunctions.show( result2, "ToTargetStraight" );
 
-		/*
-		 * Binary type
-		 */
+		final Img< UnsignedByteType > result3 = img.factory().create( interval, img.firstElement().copy() );
+		final IntervalView< UnsignedByteType > target3 = Views.translate( result3, min );
+		Erosion.erode( img, target3, diamondShape, 1 );
+		ImageJFunctions.show( result3, "ToTargetSingle" );
 
-		ImageJFunctions.show( bitsImg, "BitsSource" );
-
-		// Dilate to new image
-		final Img< BitType > imgBits3 = Erosion.erode( bitsImg, strel, 1 );
-		ImageJFunctions.show( imgBits3, "BitsErodedToNewImg" );
 	}
 
 	public static void show( final String[] args ) throws ImgIOException
@@ -149,13 +127,6 @@ public class ErosionTests
 		// Dilate to new image FULL version.
 		final Img< FloatType > img4 = Erosion.erodeFull( img, strel, maxVal, 1 );
 		ImageJFunctions.show( img4, "ErodedToNewImgFULL" );
-
-		// Dilate in place
-		final Interval interval = FinalInterval.createMinSize( new long[] { 100, -10, 200, 200 } );
-		Erosion.erodeInPlace( img, interval, strel, maxVal, 1 );
-		ImageJFunctions.show( img, "ErodedInPlace" );
-
-		ImageJFunctions.show( img, "SourceAgain" );
 
 		/*
 		 * Binary type
