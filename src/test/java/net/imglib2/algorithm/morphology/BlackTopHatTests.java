@@ -1,8 +1,9 @@
 package net.imglib2.algorithm.morphology;
 
-import ij.IJ;
 import ij.ImageJ;
-import ij.ImagePlus;
+import io.scif.img.ImgIOException;
+import io.scif.img.ImgOpener;
+import io.scif.img.SCIFIOImgPlus;
 
 import java.io.File;
 
@@ -11,7 +12,6 @@ import net.imglib2.FinalInterval;
 import net.imglib2.Interval;
 import net.imglib2.algorithm.region.localneighborhood.HyperSphereShape;
 import net.imglib2.algorithm.region.localneighborhood.Shape;
-import net.imglib2.img.ImagePlusAdapter;
 import net.imglib2.img.Img;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
@@ -20,15 +20,11 @@ import net.imglib2.view.Views;
 
 public class BlackTopHatTests
 {
-	public static void main( final String[] args )
+	public static void main( final String[] args ) throws ImgIOException
 	{
 		ImageJ.main( args );
 		final File file = new File( "/Users/tinevez/Desktop/iconas/Data/Uneven.tif" );
-		final ImagePlus imp = IJ.openImage( file.getAbsolutePath() );
-		final Object obj = ImagePlusAdapter.wrap( imp );
-
-		@SuppressWarnings( "unchecked" )
-		final Img< UnsignedByteType > img = ( Img< UnsignedByteType > ) obj;
+		final SCIFIOImgPlus img = new ImgOpener().openImgs( file.getAbsolutePath() ).get( 0 );
 		final Img< UnsignedByteType > imgInv = img.copy();
 		final Cursor< UnsignedByteType > cursor = img.cursor();
 		final Cursor< UnsignedByteType > cursor2 = imgInv.cursor();

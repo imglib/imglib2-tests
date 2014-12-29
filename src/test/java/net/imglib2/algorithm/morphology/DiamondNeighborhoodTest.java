@@ -1,24 +1,17 @@
 package net.imglib2.algorithm.morphology;
 
 
-import ij.IJ;
 import ij.ImageJ;
-import ij.ImagePlus;
 
-import java.io.File;
 import java.util.List;
 
-import net.imglib2.algorithm.morphology.neighborhoods.DiamondShape;
 import net.imglib2.algorithm.region.localneighborhood.Shape;
-import net.imglib2.img.ImagePlusAdapter;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImg;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.img.array.ArrayRandomAccess;
 import net.imglib2.img.basictypeaccess.array.ByteArray;
 import net.imglib2.img.display.imagej.ImageJFunctions;
-import net.imglib2.type.NativeType;
-import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 
 
@@ -30,7 +23,6 @@ public class DiamondNeighborhoodTest
 		main0( args ); // Look at strels
 		main1( args ); // Benchmark 3D case
 		main3( args ); // Benchmark 2D case
-		main4( args ); // Simple test on a 8-bit image
 		main7( args ); // Print the decomposition of a 3D strel
 	}
 
@@ -166,32 +158,4 @@ public class DiamondNeighborhoodTest
 			System.out.println( "" + i + '\t' + ( end - start ) );
 		}
 	}
-
-	/**
-	 * Basic processing.
-	 */
-	public static < T extends RealType< T > & NativeType< T >> void main4( final String[] args )
-	{
-
-		ImageJ.main( args );
-		final File file = new File( "/Users/tinevez/Desktop/iconas/Data/Uneven.tif" );
-		// final File file = new File(
-		// "/Users/JeanYves/Desktop/Data/brightblobs.tif" );
-		final ImagePlus imp = IJ.openImage( file.getAbsolutePath() );
-		final Img< T > img = ImagePlusAdapter.wrap( imp );
-
-		final long start = System.currentTimeMillis();
-
-		final Shape shape = new DiamondShape( 5 );
-		final Img< T > target = PeriodicLineNeighborhoodTest.dilate( img, shape );
-
-		final long end = System.currentTimeMillis();
-
-		System.out.println( "Processing done in " + ( end - start ) + " ms." );
-
-		ImageJFunctions.show( img );
-		ImageJFunctions.show( target );
-
-	}
-
 }
