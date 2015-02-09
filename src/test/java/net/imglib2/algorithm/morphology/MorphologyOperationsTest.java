@@ -24,7 +24,7 @@ import net.imglib2.img.list.ListImgFactory;
 import net.imglib2.type.Type;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 
-public class MorphologyOpsTest {
+public class MorphologyOperationsTest {
 
 	public static void main(final String[] args) {
 		weirdTypeTest();
