@@ -6,8 +6,8 @@ import ij.ImagePlus;
 
 import java.io.File;
 
-import net.imglib2.algorithm.morphology.neighborhoods.PeriodicLineShape;
-import net.imglib2.algorithm.region.localneighborhood.Shape;
+import net.imglib2.algorithm.neighborhood.PeriodicLineShape;
+import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.img.ImagePlusAdapter;
 import net.imglib2.img.Img;
 import net.imglib2.img.display.imagej.ImageJFunctions;

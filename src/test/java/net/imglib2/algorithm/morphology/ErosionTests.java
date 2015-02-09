@@ -7,8 +7,8 @@ import java.util.Random;
 
 import net.imglib2.FinalInterval;
 import net.imglib2.Interval;
-import net.imglib2.algorithm.morphology.neighborhoods.DiamondShape;
-import net.imglib2.algorithm.region.localneighborhood.Shape;
+import net.imglib2.algorithm.neighborhood.DiamondShape;
+import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImg;
 import net.imglib2.img.array.ArrayImgs;

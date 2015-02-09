@@ -24,7 +24,7 @@
  * #L%
  */
 
-package net.imglib2.algorithm.region.localneighborhood;
+package net.imglib2.algorithm.neighborhood;
 
 import io.scif.img.ImgIOException;
 import io.scif.img.ImgOpener;

@@ -24,7 +24,7 @@
  * #L%
  */
 
-package net.imglib2.algorithm.region.localneighborhood;
+package net.imglib2.algorithm.neighborhood;
 
 import net.imglib2.Cursor;
 import net.imglib2.Interval;

@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Random;
 
 import net.imglib2.RandomAccess;
-import net.imglib2.algorithm.morphology.neighborhoods.CenteredRectangleShape;
-import net.imglib2.algorithm.region.localneighborhood.HyperSphereShape;
-import net.imglib2.algorithm.region.localneighborhood.RectangleShape;
-import net.imglib2.algorithm.region.localneighborhood.Shape;
+import net.imglib2.algorithm.neighborhood.CenteredRectangleShape;
+import net.imglib2.algorithm.neighborhood.HyperSphereShape;
+import net.imglib2.algorithm.neighborhood.RectangleShape;
+import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImg;
 import net.imglib2.img.array.ArrayImgs;
