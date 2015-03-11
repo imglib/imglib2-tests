@@ -21,8 +21,8 @@ public class ClipConvexPolytopeKDTreeBenchmark
 		final ArrayList< Point > points = new ArrayList< Point >();
 		for ( int i = 0; i < nPoints; ++i )
 		{
-			final int x = rand.nextInt( w );
-			final int y = rand.nextInt( h );
+			final long x = rand.nextInt( w );
+			final long y = rand.nextInt( h );
 			points.add( new Point( x, y ) );
 		}
 
