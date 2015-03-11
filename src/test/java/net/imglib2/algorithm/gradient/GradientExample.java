@@ -2,11 +2,12 @@
  * #%L
  * ImgLib2: a general-purpose, multidimensional image processing library.
  * %%
- * Copyright (C) 2009 - 2014 Stephan Preibisch, Tobias Pietzsch, Barry DeZonia,
- * Stephan Saalfeld, Albert Cardona, Curtis Rueden, Christian Dietz, Jean-Yves
- * Tinevez, Johannes Schindelin, Lee Kamentsky, Larry Lindsey, Grant Harris,
- * Mark Hiner, Aivar Grislis, Martin Horn, Nick Perry, Michael Zinsmaier,
- * Steffen Jaensch, Jan Funke, Mark Longair, and Dimiter Prodanov.
+ * Copyright (C) 2009 - 2015 Tobias Pietzsch, Stephan Preibisch, Barry DeZonia,
+ * Stephan Saalfeld, Curtis Rueden, Albert Cardona, Christian Dietz, Jean-Yves
+ * Tinevez, Johannes Schindelin, Jonathan Hale, Lee Kamentsky, Larry Lindsey, Mark
+ * Hiner, Michael Zinsmaier, Martin Horn, Grant Harris, Aivar Grislis, John
+ * Bogovic, Steffen Jaensch, Stefan Helfrich, Jan Funke, Nick Perry, Mark Longair,
+ * Melissa Linkert and Dimiter Prodanov.
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -28,11 +29,11 @@ package net.imglib2.algorithm.gradient;
 
 import io.scif.img.ImgIOException;
 import io.scif.img.ImgOpener;
+import net.imagej.ImgPlus;
 import net.imglib2.Interval;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgFactory;
 import net.imglib2.img.display.imagej.ImageJFunctions;
-import net.imglib2.meta.ImgPlus;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.FloatType;
