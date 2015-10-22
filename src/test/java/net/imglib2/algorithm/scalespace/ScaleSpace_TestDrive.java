@@ -35,8 +35,9 @@ public class ScaleSpace_TestDrive
 	{
 		ImageJ.main( args );
 		uniqueBlob();
+		unique3DBlob();
 		rowsOfBlobs();
-		multipleBlobs();
+		//		multipleBlobs();
 	}
 
 	public static void rowsOfBlobs() throws IncompatibleTypeException
@@ -107,6 +108,38 @@ public class ScaleSpace_TestDrive
 		analyze( img );
 	}
 
+	public static void unique3DBlob() throws IncompatibleTypeException
+	{
+
+		final int width = 128;
+		final int height = 128;
+		final int depth = 32;
+		final int radius = 8;
+		final ImgFactory< UnsignedByteType > factory = new ArrayImgFactory< UnsignedByteType >();
+		final Img< UnsignedByteType > img = factory.create( new int[] { width, height, depth }, new UnsignedByteType() );
+
+		final HyperSphereShape shape = new HyperSphereShape( radius );
+		final NeighborhoodsAccessible< UnsignedByteType > neighborhoodsAccessible =
+				shape.neighborhoodsRandomAccessible( Views.extendZero( img ) );
+		final RandomAccess< Neighborhood< UnsignedByteType >> randomAccess = neighborhoodsAccessible.randomAccess();
+		randomAccess.setPosition( width / 2, 0 );
+		randomAccess.setPosition( height / 2, 1 );
+		randomAccess.setPosition( depth / 2, 2 );
+		final int val = 150;
+		for ( final UnsignedByteType pixel : randomAccess.get() )
+		{
+			pixel.set( val );
+		}
+		Gauss3.gauss( 1d, Views.extendMirrorSingle( img ), img );
+		final Random ran = new Random();
+		for ( final UnsignedByteType pixel : img )
+		{
+			pixel.set( ( int ) ( ( pixel.get() + 20 ) * ( 1 + ran.nextDouble() / 2 ) ) );
+		}
+
+		analyze( img );
+	}
+
 	public static void multipleBlobs() throws IncompatibleTypeException
 	{
 		/*
@@ -155,7 +188,7 @@ public class ScaleSpace_TestDrive
 
 		final double initialSigma = 2.5;
 		final Converter< T, FloatType > converter = new RealFloatConverter< T >();
-		final ScaleSpace< T > scaleSpace = new ScaleSpace< T >( img, converter, initialSigma, 0.03d, 2d );
+		final DogScaleSpace< T > scaleSpace = new DogScaleSpace< T >( img, converter, initialSigma, 0.03d, 2d, 10. );
 		scaleSpace.setNumThreads( 1 );
 
 		System.out.println( "Starting scale space computation." );
@@ -165,13 +198,15 @@ public class ScaleSpace_TestDrive
 			return;
 		}
 		System.out.println( "Done in " + scaleSpace.getProcessingTime() + " ms." );
+		System.out.println( " - " + scaleSpace.getFilteringStat()[ 0 ] + " spots were filtered out by non-maximal suppression." );
+		System.out.println( " - " + scaleSpace.getFilteringStat()[ 1 ] + " spots were filtered out by eliminating edge responses." );
 
 		/*
 		 * Show images
 		 */
 
-//		final Img< FloatType > results = scaleSpace.getResult();
-//		ImageJFunctions.wrapFloat( results, "Scale space" ).show();
+		final Img< FloatType > results = scaleSpace.getResult();
+		ImageJFunctions.wrapFloat( results, "Scale space" ).show();
 
 
 		/*
