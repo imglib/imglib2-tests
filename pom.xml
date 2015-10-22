@@ -57,6 +57,7 @@
 		<dependency>
 			<groupId>net.imglib2</groupId>
 			<artifactId>imglib2-algorithm</artifactId>
+      <version>0.3.3-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -122,4 +123,7 @@
 		</plugins>
 	</build>
 
+	<properties>
+		<enforcer.skip>true</enforcer.skip>
+	</properties>
 </project>
