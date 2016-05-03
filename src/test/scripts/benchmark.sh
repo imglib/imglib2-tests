@@ -67,4 +67,4 @@ $JAVA -mx$MEM -cp "$CP" $MAIN_CLASS 4690
 # 25 million
 $JAVA -mx$MEM -cp "$CP" $MAIN_CLASS 5000
 
-python "$DIR/chart-gen.py" > flot-data.js
+python "$DIR/chart-gen.py" > pchart-data.wiki
