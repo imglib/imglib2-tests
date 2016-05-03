@@ -30,13 +30,6 @@ package tests;
 import ij.ImagePlus;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
-import ijaux.Constants;
-import ijaux.PixLib;
-import ijaux.datatype.access.Access;
-import ijaux.hypergeom.PixelCube;
-import ijaux.hypergeom.index.BaseIndex;
-import ijaux.iter.array.ByteForwardIterator;
-import ijaux.iter.seq.RasterForwardIterator;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -62,11 +55,10 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.util.Fraction;
 
 /**
- * Tests performance of uint8 image operations with raw byte array, ImageJ,
- * imglib and pixlib libraries.
+ * Tests performance of uint8 image operations with raw byte array, ImageJ 1.x,
+ * and ImgLib2 libraries.
  *
  * @author Curtis Rueden
- * @author Dimiter Prodanov
  */
 public class PerformanceBenchmark {
 
@@ -78,11 +70,6 @@ public class PerformanceBenchmark {
 	private static final String METHOD_IMGLIB_CELL = "ImgLib2 (Cell)";
 	private static final String METHOD_IMGLIB_PLANAR = "ImgLib2 (Planar)";
 	private static final String METHOD_IMGLIB_IMAGEPLUS = "ImgLib2 (ImagePlus)";
-	private static final String METHOD_PIXLIB_RASTER = "PixLib (Raster Iterator)";
-	private static final String METHOD_PIXLIB_GENERIC = "PixLib (Array Iterator)";
-	private static final String METHOD_PIXLIB_BYTE =
-		"PixLib (Byte Array Iterator)";
-	private static final String METHOD_PIXLIB_ACCESS = "PixLib (Access)";
 
 	private final int width, height;
 	private final byte[] rawData;
@@ -91,7 +78,6 @@ public class PerformanceBenchmark {
 	private final Img<UnsignedByteType> imgCell;
 	private final Img<UnsignedByteType> imgPlanar;
 	private final Img<UnsignedByteType> imgImagePlus;
-	private final PixelCube<Byte, BaseIndex> pixelCube;
 
 	/**
 	 * List of timing results.
@@ -132,8 +118,6 @@ public class PerformanceBenchmark {
 		imgPlanar = createPlanarImage(rawData, width, height);
 		memUsage.add(getMemUsage());
 		imgImagePlus = createImagePlusImage(byteProc);
-		memUsage.add(getMemUsage());
-		pixelCube = createPixelCube(byteProc);
 		memUsage.add(getMemUsage());
 
 		reportMemoryUsage(memUsage);
@@ -234,14 +218,6 @@ public class PerformanceBenchmark {
 			times.add(System.currentTimeMillis());
 			invertImagePlusImage(imgImagePlus);
 			times.add(System.currentTimeMillis());
-			invertPixelCubeRaster(pixelCube);
-			times.add(System.currentTimeMillis());
-			invertPixelCubeGenArray(pixelCube);
-			times.add(System.currentTimeMillis());
-			invertPixelCubeByteArray(pixelCube);
-			times.add(System.currentTimeMillis());
-			invertPixelCubeAccess(pixelCube);
-			times.add(System.currentTimeMillis());
 			logTimePerformance(i, times);
 		}
 	}
@@ -267,14 +243,6 @@ public class PerformanceBenchmark {
 			times.add(System.currentTimeMillis());
 			randomizeImagePlusImage(imgImagePlus);
 			times.add(System.currentTimeMillis());
-			randomizePixelCubeRaster(pixelCube);
-			times.add(System.currentTimeMillis());
-			randomizePixelCubeGenArray(pixelCube);
-			times.add(System.currentTimeMillis());
-			randomizePixelCubeByteArray(pixelCube);
-			times.add(System.currentTimeMillis());
-			randomizePixelCubeAccess(pixelCube);
-			times.add(System.currentTimeMillis());
 			logTimePerformance(i, times);
 		}
 	}
@@ -293,7 +261,6 @@ public class PerformanceBenchmark {
 		final long imgLibCellMem = computeDifference(memUsage);
 		final long imgLibPlanarMem = computeDifference(memUsage);
 		final long imgLibImagePlusMem = computeDifference(memUsage);
-		final long pixLibMem = computeDifference(memUsage);
 		System.out.println();
 		System.out.println("-- MEMORY OVERHEAD --");
 		System.out.println(METHOD_RAW + ": " + rawMem + " bytes");
@@ -304,7 +271,6 @@ public class PerformanceBenchmark {
 			.println(METHOD_IMGLIB_PLANAR + ": " + imgLibPlanarMem + " bytes");
 		System.out.println(METHOD_IMGLIB_IMAGEPLUS + ": " + imgLibImagePlusMem +
 			" bytes");
-		System.out.println("PixLib: " + pixLibMem + " bytes");
 	}
 
 	private void logTimePerformance(final int iter, final List<Long> times) {
@@ -314,10 +280,6 @@ public class PerformanceBenchmark {
 		final long imgLibCellTime = computeDifference(times);
 		final long imgLibPlanarTime = computeDifference(times);
 		final long imgLibImagePlusTime = computeDifference(times);
-		final long pixLibReflTime = computeDifference(times);
-		final long pixLibGenArrayTime = computeDifference(times);
-		final long pixLibByteArrayTime = computeDifference(times);
-		final long pixLibAccessTime = computeDifference(times);
 
 		final Map<String, Long> entry = results.get(iter);
 		entry.put(METHOD_RAW, rawTime);
@@ -326,10 +288,6 @@ public class PerformanceBenchmark {
 		entry.put(METHOD_IMGLIB_CELL, imgLibCellTime);
 		entry.put(METHOD_IMGLIB_PLANAR, imgLibPlanarTime);
 		entry.put(METHOD_IMGLIB_IMAGEPLUS, imgLibImagePlusTime);
-		entry.put(METHOD_PIXLIB_RASTER, pixLibReflTime);
-		entry.put(METHOD_PIXLIB_GENERIC, pixLibGenArrayTime);
-		entry.put(METHOD_PIXLIB_BYTE, pixLibByteArrayTime);
-		entry.put(METHOD_PIXLIB_ACCESS, pixLibAccessTime);
 
 		reportTime(METHOD_RAW, rawTime, rawTime, ipTime);
 		reportTime(METHOD_IMAGEJ, ipTime, rawTime, ipTime);
@@ -337,10 +295,6 @@ public class PerformanceBenchmark {
 		reportTime(METHOD_IMGLIB_CELL, imgLibCellTime, rawTime, ipTime);
 		reportTime(METHOD_IMGLIB_PLANAR, imgLibPlanarTime, rawTime, ipTime);
 		reportTime(METHOD_IMGLIB_IMAGEPLUS, imgLibImagePlusTime, rawTime, ipTime);
-		reportTime(METHOD_PIXLIB_RASTER, pixLibReflTime, rawTime, ipTime);
-		reportTime(METHOD_PIXLIB_GENERIC, pixLibGenArrayTime, rawTime, ipTime);
-		reportTime(METHOD_PIXLIB_BYTE, pixLibByteArrayTime, rawTime, ipTime);
-		reportTime(METHOD_PIXLIB_ACCESS, pixLibAccessTime, rawTime, ipTime);
 	}
 
 	private long computeDifference(final List<Long> list) {
@@ -383,13 +337,6 @@ public class PerformanceBenchmark {
 		final int h)
 	{
 		return new ByteProcessor(w, h, data, null);
-	}
-
-	private PixelCube<Byte, BaseIndex> createPixelCube(final ByteProcessor bp) {
-		final PixLib plib = new PixLib();
-		final PixelCube<Byte, BaseIndex> pc =
-			plib.cubeFrom(bp, Constants.BASE_INDEXING);
-		return pc;
 	}
 
 	private Img<UnsignedByteType> createArrayImage(final byte[] data,
@@ -517,51 +464,6 @@ public class PerformanceBenchmark {
 		}
 	}
 
-	private void invertPixelCubeRaster(final PixelCube<Byte, BaseIndex> pc) {
-		pc.setIterationPattern(Constants.IP_FWD + Constants.IP_SINGLE);
-		final RasterForwardIterator<Byte> iterIn =
-			(RasterForwardIterator<Byte>) pc.iterator();
-		while (iterIn.hasNext()) {
-			final int value = iterIn.next() & 0xff;
-			final int result = 255 - value;
-			iterIn.dec();
-			iterIn.put((byte) result);
-		}
-	}
-
-	private void invertPixelCubeGenArray(final PixelCube<Byte, BaseIndex> pc) {
-		pc.setIterationPattern(Constants.IP_PRIM + Constants.IP_FWD +
-			Constants.IP_SINGLE);
-		final ByteForwardIterator iter = (ByteForwardIterator) pc.iterator();
-		for (final byte b : pc) {
-			final int value = b & 0xff;
-			final int result = 255 - value;
-			iter.putInt(result);
-		}
-	}
-
-	private void invertPixelCubeByteArray(final PixelCube<Byte, BaseIndex> pc) {
-		pc.setIterationPattern(Constants.IP_PRIM + Constants.IP_FWD +
-			Constants.IP_SINGLE);
-		final ByteForwardIterator iter = (ByteForwardIterator) pc.iterator();
-		while (iter.hasNext()) {
-			final int value = iter.nextByte() & 0xff;
-			final int result = 255 - value;
-			iter.dec();
-			iter.putInt(result);
-		}
-	}
-
-	private void invertPixelCubeAccess(final PixelCube<Byte, BaseIndex> pc) {
-		final Access<Byte> access = pc.getAccess();
-		final int size = access.size()[0];
-		for (int i = 0; i < size; i++) {
-			final int value = access.elementInt(i);
-			final int result = 255 - value;
-			access.putInt(i, result);
-		}
-	}
-
 	// -- Randomization methods --
 
 	private void randomizeRaw(final byte[] data) {
@@ -637,54 +539,6 @@ public class PerformanceBenchmark {
 			final int value = t.get();
 			final double result = expensiveOperation(value);
 			t.set((int) result);
-		}
-	}
-
-	private void randomizePixelCubeRaster(final PixelCube<Byte, BaseIndex> pc) {
-		pc.setIterationPattern(Constants.IP_FWD + Constants.IP_SINGLE);
-		final RasterForwardIterator<Byte> iterIn =
-			(RasterForwardIterator<Byte>) pc.iterator();
-		while (iterIn.hasNext()) {
-			final int value = iterIn.next() & 0xff;
-			final double result = expensiveOperation(value);
-			iterIn.dec();
-			iterIn.put((byte) result);
-		}
-	}
-
-	private void randomizePixelCubeGenArray(final PixelCube<Byte, BaseIndex> pc) {
-		final int iterType =
-			Constants.IP_PRIM + Constants.IP_FWD + Constants.IP_SINGLE;
-		pc.setIterationPattern(iterType);
-		final ByteForwardIterator iter = (ByteForwardIterator) pc.iterator();
-		for (final byte b : pc) {
-			final int value = b & 0xff;
-			final double result = expensiveOperation(value);
-			iter.putDouble(result);
-		}
-	}
-
-	private void randomizePixelCubeByteArray(final PixelCube<Byte, BaseIndex> pc)
-	{
-		final int iterType =
-			Constants.IP_PRIM + Constants.IP_FWD + Constants.IP_SINGLE;
-		pc.setIterationPattern(iterType);
-		final ByteForwardIterator iter = (ByteForwardIterator) pc.iterator();
-		while (iter.hasNext()) {
-			final int value = iter.nextByte() & 0xff;
-			final double result = expensiveOperation(value);
-			iter.dec();
-			iter.putDouble(result);
-		}
-	}
-
-	private void randomizePixelCubeAccess(final PixelCube<Byte, BaseIndex> pc) {
-		final Access<Byte> access = pc.getAccess();
-		final int size = access.size()[0];
-		for (int i = 0; i < size; i++) {
-			final int value = access.elementInt(i);
-			final double result = expensiveOperation(value);
-			access.putDouble(i, result);
 		}
 	}
 

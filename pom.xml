@@ -102,12 +102,6 @@
 			<version>4.4.9</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>ijaux</groupId>
-			<artifactId>pixlib</artifactId>
-			<version>0.8.0</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 
 	<build>
