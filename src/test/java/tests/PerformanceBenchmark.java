@@ -65,11 +65,11 @@ public class PerformanceBenchmark {
 	private static final boolean SAVE_RESULTS_TO_DISK = true;
 
 	private static final String METHOD_RAW = "Raw";
-	private static final String METHOD_IMAGEJ = "ImageJ";
-	private static final String METHOD_IMGLIB_ARRAY = "ImgLib2 (Array)";
-	private static final String METHOD_IMGLIB_CELL = "ImgLib2 (Cell)";
-	private static final String METHOD_IMGLIB_PLANAR = "ImgLib2 (Planar)";
-	private static final String METHOD_IMGLIB_IMAGEPLUS = "ImgLib2 (ImagePlus)";
+	private static final String METHOD_IMAGEJ = "ImageJ 1.x";
+	private static final String METHOD_IMGLIB_ARRAY = "ImgLib2 Array";
+	private static final String METHOD_IMGLIB_CELL = "ImgLib2 Cell";
+	private static final String METHOD_IMGLIB_PLANAR = "ImgLib2 Planar";
+	private static final String METHOD_IMGLIB_IMAGEPLUS = "ImgLib2 ImagePlus";
 
 	private final int width, height;
 	private final byte[] rawData;
