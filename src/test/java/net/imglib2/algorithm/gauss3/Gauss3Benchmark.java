@@ -53,7 +53,7 @@ import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
 /**
- * @author Tobias Pietzsch <tobias.pietzsch@gmail.com>
+ * @author Tobias Pietzsch
  */
 public class Gauss3Benchmark
 {

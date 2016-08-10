@@ -40,7 +40,7 @@ import net.imglib2.view.Views;
 /**
  * Example for using {@link Gauss3}.
  *
- * @author Tobias Pietzsch <tobias.pietzsch@gmail.com>
+ * @author Tobias Pietzsch
  */
 public class Gauss3Example
 {

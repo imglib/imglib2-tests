@@ -41,7 +41,7 @@ import net.imglib2.view.Views;
 /**
  * Helper class to debug neighborhoods.
  *
- * @author Tobias Pietzsch <tobias.pietzsch@gmail.com>
+ * @author Tobias Pietzsch
  */
 public class ShowCoordinates2D
 {
