@@ -13,12 +13,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -26,13 +26,12 @@
  */
 package net.imglib2.algorithm.morphology;
 
-import ij.ImageJ;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import ij.ImageJ;
 import net.imglib2.RandomAccess;
 import net.imglib2.algorithm.neighborhood.CenteredRectangleShape;
 import net.imglib2.algorithm.neighborhood.HyperSphereShape;
@@ -200,6 +199,12 @@ public class MorphologyOperationsTest {
 		@Override
 		public int compareTo(final StringType o) {
 			return str.compareToIgnoreCase(o.str);
+		}
+
+		@Override
+		public boolean valueEquals( StringType t )
+		{
+			return str.equals( t.str );
 		}
 
 	}
