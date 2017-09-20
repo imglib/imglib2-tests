@@ -48,7 +48,6 @@ import net.imglib2.img.array.ArrayImg;
 import net.imglib2.img.basictypeaccess.array.ByteArray;
 import net.imglib2.img.cell.CellCursor;
 import net.imglib2.img.cell.CellImgFactory;
-import net.imglib2.img.cell.DefaultCell;
 import net.imglib2.img.planar.PlanarCursor;
 import net.imglib2.img.planar.PlanarImg;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
@@ -429,8 +428,8 @@ public class PerformanceBenchmark {
 	/** Explicit cell version. */
 	private void invertCellImage(final Img<UnsignedByteType> img) {
 		@SuppressWarnings("unchecked")
-		final CellCursor<UnsignedByteType, ByteArray, DefaultCell<ByteArray>> c =
-			(CellCursor<UnsignedByteType, ByteArray, DefaultCell<ByteArray>>) img
+		final CellCursor<UnsignedByteType, ?> c =
+			(CellCursor<UnsignedByteType, ?>) img
 				.cursor();
 		while (c.hasNext()) {
 			final UnsignedByteType t = c.next();
@@ -507,8 +506,8 @@ public class PerformanceBenchmark {
 	/** Explicit cell version. */
 	private void randomizeCellImage(final Img<UnsignedByteType> img) {
 		@SuppressWarnings("unchecked")
-		final CellCursor<UnsignedByteType, ByteArray, DefaultCell<ByteArray>> c =
-			(CellCursor<UnsignedByteType, ByteArray, DefaultCell<ByteArray>>) img
+		final CellCursor<UnsignedByteType, ?> c =
+			(CellCursor<UnsignedByteType, ?>) img
 				.cursor();
 		while (c.hasNext()) {
 			final UnsignedByteType t = c.next();

@@ -88,17 +88,20 @@ Jean-Yves Tinevez and Michael Zinsmaier.</license.copyrightOwners>
 		<dependency>
 			<groupId>net.imglib2</groupId>
 			<artifactId>imglib2</artifactId>
+			<version>4.4.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.imglib2</groupId>
 			<artifactId>imglib2-algorithm</artifactId>
+			<version>0.8.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.imglib2</groupId>
 			<artifactId>imglib2-algorithm-gpl</artifactId>
 			<scope>test</scope>
+			<version>0.2.1</version>
 		</dependency>
 		<dependency>
 			<groupId>net.imglib2</groupId>

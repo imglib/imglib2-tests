@@ -85,7 +85,7 @@ public class ImglibBenchmark {
 	private final byte[] rawData;
 	private final ByteProcessor byteProc;
 	private final ArrayImg<UnsignedByteType, ByteArray> imgArray;
-	private final CellImg<UnsignedByteType, ByteArray, ?> imgCell;
+	private final CellImg<UnsignedByteType, ByteArray> imgCell;
 	private final PlanarImg<UnsignedByteType, ByteArray> imgPlanar;
 	private final ByteImagePlus<UnsignedByteType> imgImagePlus;
 	private final ListImg<UnsignedByteType> imgList;
@@ -510,7 +510,7 @@ public class ImglibBenchmark {
 		return planarContainer;
 	}
 
-	private CellImg<UnsignedByteType, ByteArray, ?> createCellImage() {
+	private CellImg<UnsignedByteType, ByteArray> createCellImage() {
 		final UnsignedByteType type = new UnsignedByteType();
 		final int cellSize = ( int ) Math.pow( Integer.MAX_VALUE / type.getEntitiesPerPixel().getRatio(), 1.0 / numDimensions );
 
@@ -525,7 +525,7 @@ public class ImglibBenchmark {
 
 		@SuppressWarnings( "unchecked" )
 		final
-		CellImg<UnsignedByteType, ByteArray, ?> cellContainer = ( CellImg<UnsignedByteType, ByteArray, ?> ) createImage( dimensions, new CellImgFactory< UnsignedByteType >( cellSize ) );
+		CellImg<UnsignedByteType, ByteArray> cellContainer = ( CellImg<UnsignedByteType, ByteArray> ) createImage( dimensions, new CellImgFactory< UnsignedByteType >( cellSize ) );
 		return cellContainer;
 	}
 
@@ -602,8 +602,8 @@ public class ImglibBenchmark {
 	}
 
 	/** Explicit cell version. */
-	private void invertCellImage(final CellImg<UnsignedByteType, ByteArray, ?> img) {
-		final CellCursor< UnsignedByteType, ByteArray, ? > c = img.cursor();
+	private void invertCellImage(final CellImg<UnsignedByteType, ByteArray> img) {
+		final CellCursor< UnsignedByteType, ? > c = img.cursor();
 		while ( c.hasNext() ) {
 			final UnsignedByteType t = c.next();
 			final int value = t.get();
@@ -685,8 +685,8 @@ public class ImglibBenchmark {
 	}
 
 	/** Explicit cell version. */
-	private void randomizeCellImage(final CellImg<UnsignedByteType, ByteArray, ?> img) {
-		final CellCursor< UnsignedByteType, ByteArray, ? > c = img.cursor();
+	private void randomizeCellImage(final CellImg<UnsignedByteType, ByteArray> img) {
+		final CellCursor< UnsignedByteType, ? > c = img.cursor();
 		while ( c.hasNext() ) {
 			final UnsignedByteType t = c.next();
 			final int value = t.get();
