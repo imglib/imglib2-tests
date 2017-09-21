@@ -9,6 +9,7 @@ import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.type.logic.BitType;
+import net.imglib2.type.numeric.integer.IntType;
 
 public class PositioningExample
 {
@@ -23,31 +24,48 @@ public class PositioningExample
 		ImageJFunctions.show( mask );
 
 		{
-			final Img< BitType > output = ArrayImgs.bits( new long[] { 50, 50 } );
+			final Img< IntType > output = ArrayImgs.ints( new long[] { 50, 50 } );
 			final PositionableIterableRegion< BitType > roi = Regions.positionable( mask );
-			Regions.sample( roi, output ).forEach( t -> t.set( true ) );
+			Regions.sample( roi, output ).forEach( t -> t.set( 255 ) );
 			roi.setPosition( 20, 0 );
-			Regions.sample( roi, output ).forEach( t -> t.set( true ) );
+			Regions.sample( roi, output ).forEach( t -> t.set( 255 ) );
 			roi.setPosition( 20, 1 );
-			Regions.sample( roi, output ).forEach( t -> t.set( true ) );
+			Regions.sample( roi, output ).forEach( t -> t.set( 255 ) );
 			roi.setPosition( 0, 0 );
-			Regions.sample( roi, output ).forEach( t -> t.set( true ) );
+			Regions.sample( roi, output ).forEach( t -> t.set( 255 ) );
 			ImageJFunctions.show( output );
 		}
 
 		{
-			final Img< BitType > output = ArrayImgs.bits( new long[] { 50, 50 } );
-			final PositionableIterableInterval< BitType > roi = Regions.sample( Regions.positionable( mask ), output );
+			final Img< IntType > output = ArrayImgs.ints( new long[] { 50, 50 } );
+			final PositionableIterableRegion< BitType > roi = Regions.positionable( mask );
 			roi.origin().setPosition( new long[] { 4, 4 } );
 			roi.setPosition( 4, 0 );
 			roi.setPosition( 4, 1 );
-			roi.forEach( t -> t.set( true ) );
+			Regions.sample( roi, output ).forEach( t -> t.set( 255 ) );
 			roi.setPosition( 24, 0 );
-			roi.forEach( t -> t.set( true ) );
+			Regions.sample( roi, output ).forEach( t -> t.set( 255 ) );
 			roi.setPosition( 24, 1 );
-			roi.forEach( t -> t.set( true ) );
+			Regions.sample( roi, output ).forEach( t -> t.set( 255 ) );
 			roi.setPosition( 4, 0 );
-			roi.forEach( t -> t.set( true ) );
+			Regions.sample( roi, output ).forEach( t -> t.set( 255 ) );
+			ImageJFunctions.show( output );
+		}
+
+		{
+			final Img< IntType > output = ArrayImgs.ints( new long[] { 50, 50 } );
+			final PositionableIterableRegion< BitType > roi = Regions.positionable( mask );
+			roi.origin().setPosition( new long[] { 4, 4 } );
+			final PositionableIterableInterval< IntType > sampled = Regions.sample( roi, output );
+			sampled.setPosition( 4, 0 );
+			sampled.setPosition( 4, 1 );
+			sampled.forEach( t -> t.set( 255 ) );
+			sampled.setPosition( 24, 0 );
+			sampled.forEach( t -> t.set( 255 ) );
+			sampled.setPosition( 24, 1 );
+			sampled.forEach( t -> t.set( 255 ) );
+			sampled.setPosition( 4, 0 );
+			sampled.forEach( t -> t.set( 255 ) );
 			ImageJFunctions.show( output );
 		}
 	}
