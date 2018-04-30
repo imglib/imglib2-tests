@@ -91,17 +91,17 @@ public class ErosionTests
 		final long[] min = new long[ interval.numDimensions() ];
 		interval.min( min );
 
-		final Img< UnsignedByteType > result1 = img.factory().create( interval, img.firstElement().copy() );
+		final Img< UnsignedByteType > result1 = img.factory().create( interval );
 		final IntervalView< UnsignedByteType > target1 = Views.translate( result1, min );
 		Erosion.erode( img, target1, StructuringElements.diamond( 8, 2, true ), 1 );
 		ImageJFunctions.show( result1, "ToTargetDecomp" );
 
-		final Img< UnsignedByteType > result2 = img.factory().create( interval, img.firstElement().copy() );
+		final Img< UnsignedByteType > result2 = img.factory().create( interval );
 		final IntervalView< UnsignedByteType > target2 = Views.translate( result2, min );
 		Erosion.erode( img, target2, StructuringElements.diamond( 8, 2, false ), 1 );
 		ImageJFunctions.show( result2, "ToTargetStraight" );
 
-		final Img< UnsignedByteType > result3 = img.factory().create( interval, img.firstElement().copy() );
+		final Img< UnsignedByteType > result3 = img.factory().create( interval );
 		final IntervalView< UnsignedByteType > target3 = Views.translate( result3, min );
 		Erosion.erode( img, target3, diamondShape, 1 );
 		ImageJFunctions.show( result3, "ToTargetSingle" );
@@ -115,9 +115,7 @@ public class ErosionTests
 		final FloatType maxVal = new FloatType( Float.POSITIVE_INFINITY );
 
 //		final String fn = "DrosophilaWing.tif";
-//		final List< SCIFIOImgPlus< FloatType >> imgs = new
-//				ImgOpener().openImgs( fn, new ArrayImgFactory< FloatType >(), new
-//						FloatType() );
+//		final List< SCIFIOImgPlus< FloatType > > imgs = IO.openImgs( fn, new ArrayImgFactory<>( new FloatType() ) );
 //		final Img< FloatType > img = imgs.get( 0 ).getImg();
 
 		final ArrayImg< FloatType, FloatArray > img = ArrayImgs.floats( new long[] { 800, 600 } );
@@ -138,8 +136,8 @@ public class ErosionTests
 		ImageJFunctions.show( img, "Source" );
 
 		// Dilate to provided target
-		final Interval interval2 = FinalInterval.createMinSize( new long[] { 280, 200, 185, 100 } );
-		final Img< FloatType > img2 = img.factory().create( interval2, new FloatType() );
+		final Interval interval2 = FinalInterval.createMinSize( 280, 200, 185, 100 );
+		final Img< FloatType > img2 = img.factory().create( interval2 );
 		final long[] translation = new long[ interval2.numDimensions() ];
 		interval2.min( translation );
 		final IntervalView< FloatType > translate = Views.translate( img2, translation );

@@ -256,13 +256,13 @@ public class KNearestNeighborSearchPhyllotaxisBehavior
 //		for ( int i = 0; i < samples.length; ++i )
 //			list.add( new RealPoint( coordinates[ i ] ), new UnsignedShortType( samples[ i ] ) );
 
-		final RealPointSampleList< UnsignedShortType > list = new RealPointSampleList< UnsignedShortType >( 3 );
+		final RealPointSampleList< UnsignedShortType > list = new RealPointSampleList<>( 3 );
 
 		createPhyllotaxis2( list, m, size[ 0 ] / 2.0, size[ 1 ] / 2.0, 20 );
 
-		final ImagePlusImgFactory< UnsignedShortType > factory = new ImagePlusImgFactory< UnsignedShortType >();
+		final ImagePlusImgFactory< UnsignedShortType > factory = new ImagePlusImgFactory<>( new UnsignedShortType() );
 
-		final KDTree< UnsignedShortType > kdtree = new KDTree< UnsignedShortType >( list );
+		final KDTree< UnsignedShortType > kdtree = new KDTree<>( list );
 
 		new ImageJ();
 
@@ -272,10 +272,10 @@ public class KNearestNeighborSearchPhyllotaxisBehavior
 		
 		/* nearest neighbor */
 		IJ.log( "Nearest neighbor ..." );
-		final ImagePlusImg< UnsignedShortType, ? > img4 = factory.create( new long[]{ size[ 0 ], size[ 1 ], 2 }, new UnsignedShortType() );
+		final ImagePlusImg< UnsignedShortType, ? > img4 = factory.create( size[ 0 ], size[ 1 ], 2 );
 		t = drawNearestNeighbor(
 				img4,
-				new NearestNeighborSearchOnKDTree< UnsignedShortType >( kdtree ) );
+				new NearestNeighborSearchOnKDTree<>( kdtree ) );
 		
 		IJ.log( t + "ms " );
 		

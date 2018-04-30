@@ -85,8 +85,7 @@ public class PerformanceBenchmark {
 	 * method name to the time measured.
 	 * </p>
 	 */
-	private final List<Map<String, Long>> results =
-		new ArrayList<Map<String, Long>>();
+	private final List< Map< String, Long > > results = new ArrayList<>();
 
 	public static void main(final String[] args) throws IOException {
 		final int iterations = 10;
@@ -104,7 +103,7 @@ public class PerformanceBenchmark {
 		System.out.println();
 		System.out.println("===== " + width + " x " + height + " =====");
 
-		final List<Long> memUsage = new ArrayList<Long>();
+		final List<Long> memUsage = new ArrayList<>();
 		memUsage.add(getMemUsage());
 		rawData = createRawData(width, height);
 		memUsage.add(getMemUsage());
@@ -126,7 +125,7 @@ public class PerformanceBenchmark {
 		// initialize results map
 		results.clear();
 		for (int i = 0; i < iterationCount; i++) {
-			final Map<String, Long> entry = new HashMap<String, Long>();
+			final Map<String, Long> entry = new HashMap<>();
 			results.add(entry);
 		}
 		testCheapPerformance(iterationCount);
@@ -203,7 +202,7 @@ public class PerformanceBenchmark {
 		for (int i = 0; i < iterationCount; i++) {
 			System.gc();
 			System.out.println("Iteration #" + (i + 1) + "/" + iterationCount + ":");
-			final List<Long> times = new ArrayList<Long>();
+			final List<Long> times = new ArrayList<>();
 			times.add(System.currentTimeMillis());
 			invertRaw(rawData);
 			times.add(System.currentTimeMillis());
@@ -228,7 +227,7 @@ public class PerformanceBenchmark {
 		for (int i = 0; i < iterationCount; i++) {
 			System.gc();
 			System.out.println("Iteration #" + (i + 1) + "/" + iterationCount + ":");
-			final List<Long> times = new ArrayList<Long>();
+			final List<Long> times = new ArrayList<>();
 			times.add(System.currentTimeMillis());
 			randomizeRaw(rawData);
 			times.add(System.currentTimeMillis());
@@ -344,9 +343,7 @@ public class PerformanceBenchmark {
 		// return createImage(data, width, height, new ArrayContainerFactory());
 		// NB: Avoid copying the data.
 		final ByteArray byteAccess = new ByteArray(data);
-		final ArrayImg<UnsignedByteType, ByteArray> array =
-			new ArrayImg<UnsignedByteType, ByteArray>(byteAccess,
-				new long[] { w, h }, new Fraction());
+		final ArrayImg< UnsignedByteType, ByteArray > array = new ArrayImg<>( byteAccess, new long[] { w, h }, new Fraction() );
 		array.setLinkedType(new UnsignedByteType(array));
 		return array;
 	}
@@ -356,8 +353,7 @@ public class PerformanceBenchmark {
 	{
 		// return createImage(data, width, height, new PlanarContainerFactory());
 		// NB: Avoid copying the data.
-		final PlanarImg<UnsignedByteType, ByteArray> planarContainer =
-			new PlanarImg<UnsignedByteType, ByteArray>(new long[] { w, h }, new Fraction());
+		final PlanarImg< UnsignedByteType, ByteArray > planarContainer = new PlanarImg<>( new long[] { w, h }, new Fraction() );
 		planarContainer.setPlane(0, new ByteArray(data));
 		planarContainer.setLinkedType(new UnsignedByteType(planarContainer));
 		return planarContainer;
@@ -366,7 +362,7 @@ public class PerformanceBenchmark {
 	private Img<UnsignedByteType> createCellImage(final byte[] data, final int w,
 		final int h)
 	{
-		return createImage(data, w, h, new CellImgFactory<UnsignedByteType>());
+		return createImage( data, w, h, new CellImgFactory<>( new UnsignedByteType() ) );
 	}
 
 	private Img<UnsignedByteType> createImagePlusImage(final ImageProcessor ip) {
@@ -378,7 +374,7 @@ public class PerformanceBenchmark {
 		final int h, final ImgFactory<UnsignedByteType> cf)
 	{
 		final long[] dim = { w, h };
-		final Img<UnsignedByteType> img = cf.create(dim, new UnsignedByteType());
+		final Img< UnsignedByteType > img = cf.create( dim );
 		int index = 0;
 		for (final UnsignedByteType t : img)
 			t.set(data[index++]);

@@ -27,8 +27,9 @@
 package net.imglib2.algorithm.morphology;
 
 import ij.ImageJ;
+
+import io.scif.img.IO;
 import io.scif.img.ImgIOException;
-import io.scif.img.ImgOpener;
 import io.scif.img.SCIFIOImgPlus;
 
 import java.util.List;
@@ -75,9 +76,7 @@ public class OpeningTests
 		ImageJ.main( args );
 
 		final String fn = "DrosophilaWing.tif";
-		final List< SCIFIOImgPlus< FloatType >> imgs = new
-				ImgOpener().openImgs( fn, new ArrayImgFactory< FloatType >(), new
-						FloatType() );
+		final List< SCIFIOImgPlus< FloatType > > imgs = IO.openImgs( fn, new ArrayImgFactory<>( new FloatType() ) );
 		final Img< FloatType > img = imgs.get( 0 ).getImg();
 
 //		final ArrayImg< FloatType, FloatArray > img = ArrayImgs.floats( new long[] { 800, 600 } );
@@ -101,7 +100,7 @@ public class OpeningTests
 
 		// Open to provided target
 		final Interval interval2 = FinalInterval.createMinSize( new long[] { 280, 200, 185, 100 } );
-		final Img< FloatType > img2 = img.factory().create( interval2, new FloatType() );
+		final Img< FloatType > img2 = img.factory().create( interval2 );
 		final long[] translation = new long[ interval2.numDimensions() ];
 		interval2.min( translation );
 		final IntervalView< FloatType > translate = Views.translate( img2, translation );
@@ -124,7 +123,7 @@ public class OpeningTests
 		final ExtendedRandomAccessibleInterval< BitType, Img< BitType >> bitExtendZero = Views.extendZero( bitImg );
 
 		// Open to provided target
-		final Img< BitType > bitImg2 = bitImg.factory().create( interval2, new BitType() );
+		final Img< BitType > bitImg2 = bitImg.factory().create( interval2 );
 		interval2.min( translation );
 		final IntervalView< BitType > bitTranslate = Views.translate( bitImg2, translation );
 		Opening.open( bitExtendZero, bitTranslate, strel, 1 );
@@ -147,9 +146,7 @@ public class OpeningTests
 		final Shape strel = new HyperSphereShape( 6 );
 
 		final String fn = "DrosophilaWing.tif";
-		final List< SCIFIOImgPlus< FloatType >> imgs = new
-				ImgOpener().openImgs( fn, new ArrayImgFactory< FloatType >(), new
-						FloatType() );
+		final List< SCIFIOImgPlus< FloatType > > imgs = IO.openImgs( fn, new ArrayImgFactory<>( new FloatType() ) );
 		final Img< FloatType > img = imgs.get( 0 ).getImg();
 
 //		final ArrayImg< FloatType, FloatArray > img = ArrayImgs.floats( new long[] { 800, 600 } );
@@ -173,7 +170,7 @@ public class OpeningTests
 
 		// Open to provided target
 		final Interval interval2 = FinalInterval.createMinSize( new long[] { 280, 200, 185, 100 } );
-		final Img< FloatType > img2 = img.factory().create( interval2, new FloatType() );
+		final Img< FloatType > img2 = img.factory().create( interval2 );
 		final long[] translation = new long[ interval2.numDimensions() ];
 		interval2.min( translation );
 		final IntervalView< FloatType > translate = Views.translate( img2, translation );
@@ -196,7 +193,7 @@ public class OpeningTests
 		final ExtendedRandomAccessibleInterval< BitType, Img< BitType >> bitExtendZero = Views.extendZero( bitImg );
 
 		// Open to provided target
-		final Img< BitType > bitImg2 = bitImg.factory().create( interval2, new BitType() );
+		final Img< BitType > bitImg2 = bitImg.factory().create( interval2 );
 		interval2.min( translation );
 		final IntervalView< BitType > bitTranslate = Views.translate( bitImg2, translation );
 		Opening.open( bitExtendZero, bitTranslate, strel, 1 );

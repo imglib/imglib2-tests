@@ -28,8 +28,9 @@
 package net.imglib2.algorithm;
 
 import ij.ImageJ;
+
+import io.scif.img.IO;
 import io.scif.img.ImgIOException;
-import io.scif.img.ImgOpener;
 
 import java.io.File;
 
@@ -39,8 +40,6 @@ import net.imglib2.Interval;
 import net.imglib2.RandomAccess;
 import net.imglib2.exception.IncompatibleTypeException;
 import net.imglib2.img.Img;
-import net.imglib2.img.ImgFactory;
-import net.imglib2.img.array.ArrayImgFactory;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.outofbounds.OutOfBounds;
 import net.imglib2.type.NativeType;
@@ -73,7 +72,7 @@ public class TestRelativeIterationPerformance<T extends RealType<T>> implements 
 	public TestRelativeIterationPerformance(final Img<T> input) {
 		this.input = input;
 		try {
-			output = input.factory().imgFactory(new FloatType()).create( input, new FloatType() );
+			output = input.factory().imgFactory( new FloatType() ).create( input );
 		} catch (final IncompatibleTypeException e) {
 			e.printStackTrace();
 		}
@@ -454,7 +453,7 @@ public class TestRelativeIterationPerformance<T extends RealType<T>> implements 
 	public static <T extends RealType<T> & NativeType< T >> void benchmark( final IterationMethod method, final String msg, final int niter, final Img< T > image )
 	{
 		// Init algo
-		final TestRelativeIterationPerformance<T> algo = new TestRelativeIterationPerformance<T>(image);
+		final TestRelativeIterationPerformance<T> algo = new TestRelativeIterationPerformance<>(image);
 
 		algo.method = method;
 
@@ -483,8 +482,7 @@ public class TestRelativeIterationPerformance<T extends RealType<T>> implements 
 		final int niter = 1000;
 
 		// Open file in imglib2
-		final ImgFactory< ? > imgFactory = new ArrayImgFactory< T >();
-		final Img< T > image = (Img< T >) new ImgOpener().openImg( file.getAbsolutePath(), imgFactory );
+		final Img< T > image = ( Img< T > ) IO.openImgs( file.getAbsolutePath() ).get( 0 );
 
 		// Display it via ImgLib using ImageJ
 		new ImageJ();

@@ -29,10 +29,8 @@ package net.imglib2.algorithm.pde;
 
 import ij.IJ;
 import ij.ImagePlus;
-import io.scif.img.ImgIOException;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
+import io.scif.img.ImgIOException;
 
 import net.imglib2.exception.IncompatibleTypeException;
 import net.imglib2.img.Img;
@@ -44,7 +42,7 @@ public class PeronaMalikAnisotropicDiffusionExample {
 
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static <T extends RealType<T> & NativeType< T >> void main(String[] args) throws InterruptedException, URISyntaxException, MalformedURLException, ImgIOException, IncompatibleTypeException {
+	public static <T extends RealType<T> & NativeType< T >> void main(String[] args) throws ImgIOException, IncompatibleTypeException {
 	
 		ij.ImageJ.main(args);
 		ImagePlus imp = IJ.openImage("http://rsb.info.nih.gov/ij/images/boats.gif");

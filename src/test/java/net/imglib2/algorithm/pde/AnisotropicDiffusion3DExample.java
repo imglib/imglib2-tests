@@ -29,8 +29,9 @@ package net.imglib2.algorithm.pde;
 import ij.ImageJ;
 import ij.ImagePlus;
 import ij.gui.ImageWindow;
+
+import io.scif.img.IO;
 import io.scif.img.ImgIOException;
-import io.scif.img.ImgOpener;
 
 import java.io.File;
 
@@ -107,10 +108,10 @@ public class AnisotropicDiffusion3DExample {
 	public static <T extends RealType<T> & NativeType< T >> Img openExampleImage(T type) {
 		File file = new File( "/Users/tinevez/Desktop/Data/StarryNight.tif");
 
-		ImgFactory< ? > imgFactory = new ArrayImgFactory< T >();
+		ImgFactory< T > imgFactory = new ArrayImgFactory<>( type );
 		Img<T> image = null;
 		try {
-			image = (Img<T>) new ImgOpener().openImg( file.getAbsolutePath(), imgFactory );
+			image = IO.openImgs( file.getAbsolutePath(), imgFactory ).get( 0 );
 		} catch (ImgIOException e) {
 			e.printStackTrace();
 		}
@@ -124,13 +125,13 @@ public class AnisotropicDiffusion3DExample {
 		double[] phis = new double[] { 0 , 45 , 90,  135 ,  180 ,  225 ,270,  315  };
 		double[] thetas = new double[] { 0, 30, 60, 90, 120, 150, 180 };
 
-		final ImgFactory< T > imgFactory = new ArrayImgFactory<T>();
-		Img<T> image = imgFactory.create(new int[] { size, size, size }, type);
+		final ImgFactory< T > imgFactory = new ArrayImgFactory<>( type );
+		Img< T > image = imgFactory.create( size, size, size );
 
 		double phi, theta;
 		Point P1, P2;
 		long x1, x2, y1, y2, z1, z2;
-		BresenhamLine<T> line = new BresenhamLine<T>(image);
+		BresenhamLine<T> line = new BresenhamLine<>(image);
 
 		for (int j = 0; j < thetas.length; j++) {
 

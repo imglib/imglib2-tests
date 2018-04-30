@@ -27,8 +27,9 @@
 package net.imglib2.algorithm.morphology;
 
 import ij.ImageJ;
+
+import io.scif.img.IO;
 import io.scif.img.ImgIOException;
-import io.scif.img.ImgOpener;
 import io.scif.img.SCIFIOImgPlus;
 
 import java.util.List;
@@ -74,12 +75,10 @@ public class ClosingTests
 		ImageJ.main( args );
 
 		final String fn = "DrosophilaWing.tif";
-		final List< SCIFIOImgPlus< UnsignedByteType >> imgs = new
-				ImgOpener().openImgs( fn, new ArrayImgFactory< UnsignedByteType >(), new
-						UnsignedByteType() );
+		final List< SCIFIOImgPlus< UnsignedByteType > > imgs = IO.openImgs( fn, new ArrayImgFactory<>( new UnsignedByteType() ) );
 		final Img< UnsignedByteType > img = imgs.get( 0 ).getImg();
 
-//		final ArrayImg< UnsignedByteType, FloatArray > img = ArrayImgs.floats( new long[] { 800, 600 } );
+//		final ArrayImg< UnsignedByteType, FloatArray > img = ArrayImgs.floats( 800, 600 );
 //		for ( final UnsignedByteType pixel : img )
 //		{
 //			pixel.set( 255f );
@@ -99,8 +98,8 @@ public class ClosingTests
 		final ExtendedRandomAccessibleInterval< UnsignedByteType, Img< UnsignedByteType >> extendZero = Views.extendZero( img );
 
 		// Close to provided target
-		final Interval interval2 = FinalInterval.createMinSize( new long[] { 280, 200, 185, 100 } );
-		final Img< UnsignedByteType > img2 = img.factory().create( interval2, new UnsignedByteType() );
+		final Interval interval2 = FinalInterval.createMinSize( 280, 200, 185, 100 );
+		final Img< UnsignedByteType > img2 = img.factory().create( interval2 );
 		final long[] translation = new long[ interval2.numDimensions() ];
 		interval2.min( translation );
 		final IntervalView< UnsignedByteType > translate = Views.translate( img2, translation );
@@ -112,7 +111,7 @@ public class ClosingTests
 		ImageJFunctions.show( img3, "ClosedToNewImg" );
 
 		// Close in place
-		final Interval interval = FinalInterval.createMinSize( new long[] { 100, -10, 200, 200 } );
+		final Interval interval = FinalInterval.createMinSize( 100, -10, 200, 200 );
 		Closing.closeInPlace( img, interval, strel, 1 );
 		ImageJFunctions.show( img, "ClosedInPlace" );
 
@@ -123,7 +122,7 @@ public class ClosingTests
 		final ExtendedRandomAccessibleInterval< BitType, Img< BitType >> bitExtendZero = Views.extendZero( bitImg );
 
 		// Close to provided target
-		final Img< BitType > bitImg2 = bitImg.factory().create( interval2, new BitType() );
+		final Img< BitType > bitImg2 = bitImg.factory().create( interval2 );
 		interval2.min( translation );
 		final IntervalView< BitType > bitTranslate = Views.translate( bitImg2, translation );
 		Closing.close( bitExtendZero, bitTranslate, strel, 1 );
@@ -146,12 +145,10 @@ public class ClosingTests
 //		final Shape strel = new HyperSphereShape( 6 );
 
 		final String fn = "DrosophilaWing.tif";
-		final List< SCIFIOImgPlus< UnsignedByteType >> imgs = new
-				ImgOpener().openImgs( fn, new ArrayImgFactory< UnsignedByteType >(), new
-						UnsignedByteType() );
+		final List< SCIFIOImgPlus< UnsignedByteType > > imgs = IO.openImgs( fn, new ArrayImgFactory<>( new UnsignedByteType() ) );
 		final Img< UnsignedByteType > img = imgs.get( 0 ).getImg();
 
-//		final ArrayImg< UnsignedByteType, FloatArray > img = ArrayImgs.floats( new long[] { 800, 600 } );
+//		final ArrayImg< UnsignedByteType, FloatArray > img = ArrayImgs.floats( 800, 600 );
 //		for ( final UnsignedByteType pixel : img )
 //		{
 //			pixel.set( 255f );
@@ -171,8 +168,8 @@ public class ClosingTests
 		final ExtendedRandomAccessibleInterval< UnsignedByteType, Img< UnsignedByteType >> extendZero = Views.extendZero( img );
 
 		// Close to provided target
-		final Interval interval2 = FinalInterval.createMinSize( new long[] { 280, 200, 185, 100 } );
-		final Img< UnsignedByteType > img2 = img.factory().create( interval2, new UnsignedByteType() );
+		final Interval interval2 = FinalInterval.createMinSize( 280, 200, 185, 100 );
+		final Img< UnsignedByteType > img2 = img.factory().create( interval2 );
 		final long[] translation = new long[ interval2.numDimensions() ];
 		interval2.min( translation );
 		final IntervalView< UnsignedByteType > translate = Views.translate( img2, translation );
@@ -184,7 +181,7 @@ public class ClosingTests
 		ImageJFunctions.show( img3, "ClosedToNewImg" );
 
 		// Close in place
-		final Interval interval = FinalInterval.createMinSize( new long[] { 100, -10, 200, 200 } );
+		final Interval interval = FinalInterval.createMinSize( 100, -10, 200, 200 );
 		Closing.closeInPlace( img, interval, strel, 1 );
 		ImageJFunctions.show( img, "ClosedInPlace" );
 
@@ -195,7 +192,7 @@ public class ClosingTests
 		final ExtendedRandomAccessibleInterval< BitType, Img< BitType >> bitExtendZero = Views.extendZero( bitImg );
 
 		// Close to provided target
-		final Img< BitType > bitImg2 = bitImg.factory().create( interval2, new BitType() );
+		final Img< BitType > bitImg2 = bitImg.factory().create( interval2 );
 		interval2.min( translation );
 		final IntervalView< BitType > bitTranslate = Views.translate( bitImg2, translation );
 		Closing.close( bitExtendZero, bitTranslate, strel, 1 );
@@ -216,14 +213,14 @@ public class ClosingTests
 
 		final Shape strel = new DiamondShape( 3 );
 
-		final ArrayImg< UnsignedByteType, ByteArray > img = ArrayImgs.unsignedBytes( new long[] { 200, 200 } );
+		final ArrayImg< UnsignedByteType, ByteArray > img = ArrayImgs.unsignedBytes( 200, 200 );
 		for ( final UnsignedByteType pixel : img )
 		{
 			pixel.set( 1 );
 		}
 		final ArrayRandomAccess< UnsignedByteType > ra = img.randomAccess();
 
-		final ArrayImg< BitType, LongArray > bitsImg = ArrayImgs.bits( new long[] { img.dimension( 0 ), img.dimension( 1 ) } );
+		final ArrayImg< BitType, LongArray > bitsImg = ArrayImgs.bits( img.dimension( 0 ), img.dimension( 1 ) );
 		for ( final BitType pixelB : bitsImg )
 		{
 			pixelB.set( true );

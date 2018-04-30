@@ -96,8 +96,7 @@ public class ImglibBenchmark {
 	 * Each element of the list represents an iteration.
 	 * Each entry maps the method name to the time measured.
 	 */
-	private final List<Map<String, Long>> results =
-		new ArrayList<Map<String, Long>>();
+	private final List< Map< String, Long > > results = new ArrayList<>();
 
 	public static void main(final String[] args) throws IOException {
 		final boolean testListImg = false;
@@ -135,7 +134,7 @@ public class ImglibBenchmark {
 			System.out.print( dimensions[ d ] + ( d == numDimensions - 1 ? "" : " x " ) );
 		System.out.println( " =====" );
 
-		final List<Long> memUsage = new ArrayList<Long>();
+		final List<Long> memUsage = new ArrayList<>();
 		memUsage.add(getMemUsage());
 		rawData = createRawData();
 		memUsage.add(getMemUsage());
@@ -162,7 +161,7 @@ public class ImglibBenchmark {
 		// initialize results map
 		results.clear();
 		for (int i = 0; i < iterationCount; i++) {
-			final Map<String, Long> entry = new HashMap<String, Long>();
+			final Map< String, Long > entry = new HashMap<>();
 			results.add(entry);
 		}
 		testCheapPerformance(iterationCount);
@@ -237,7 +236,7 @@ public class ImglibBenchmark {
 		for (int i = 0; i < iterationCount; i++) {
 			System.gc();
 			System.out.println("Iteration #" + (i + 1) + "/" + iterationCount + ":");
-			final List<Long> times = new ArrayList<Long>();
+			final List<Long> times = new ArrayList<>();
 
 			times.add(System.currentTimeMillis());
 			if ( rawData != null ) invertRaw(rawData);
@@ -273,7 +272,7 @@ public class ImglibBenchmark {
 		for (int i = 0; i < iterationCount; i++) {
 			System.gc();
 			System.out.println("Iteration #" + (i + 1) + "/" + iterationCount + ":");
-			final List<Long> times = new ArrayList<Long>();
+			final List<Long> times = new ArrayList<>();
 			times.add(System.currentTimeMillis());
 			if ( rawData != null ) randomizeRaw(rawData);
 			times.add(System.currentTimeMillis());
@@ -483,7 +482,7 @@ public class ImglibBenchmark {
 		if ( data == null )
 			return null;
 		final ByteArray byteAccess = new ByteArray(data);
-		final ArrayImg<UnsignedByteType, ByteArray> array = new ArrayImg<UnsignedByteType, ByteArray>( byteAccess, dimensions, new Fraction() );
+		final ArrayImg<UnsignedByteType, ByteArray> array = new ArrayImg<>( byteAccess, dimensions, new Fraction() );
 		array.setLinkedType(new UnsignedByteType(array));
 		return array;
 		//return DevUtil.createImageFromArray(data, new int[] {width, height});
@@ -494,7 +493,7 @@ public class ImglibBenchmark {
 		if ( numDimensions == 2 && data != null )
 		{
 			// NB: Avoid copying the data.
-			final PlanarImg<UnsignedByteType, ByteArray> planarContainer = new PlanarImg<UnsignedByteType, ByteArray>(dimensions, new Fraction() );
+			final PlanarImg<UnsignedByteType, ByteArray> planarContainer = new PlanarImg<>(dimensions, new Fraction() );
 			planarContainer.setPlane(0, new ByteArray(data));
 			planarContainer.setLinkedType(new UnsignedByteType(planarContainer));
 			return planarContainer;
@@ -506,7 +505,7 @@ public class ImglibBenchmark {
 
 		@SuppressWarnings( "unchecked" )
 		final
-		PlanarImg<UnsignedByteType, ByteArray> planarContainer = ( PlanarImg<UnsignedByteType, ByteArray> ) createImage( dimensions, new PlanarImgFactory< UnsignedByteType >() );
+		PlanarImg< UnsignedByteType, ByteArray > planarContainer = ( PlanarImg< UnsignedByteType, ByteArray > ) createImage( dimensions, new PlanarImgFactory<>( new UnsignedByteType() ) );
 		return planarContainer;
 	}
 
@@ -525,7 +524,7 @@ public class ImglibBenchmark {
 
 		@SuppressWarnings( "unchecked" )
 		final
-		CellImg<UnsignedByteType, ByteArray> cellContainer = ( CellImg<UnsignedByteType, ByteArray> ) createImage( dimensions, new CellImgFactory< UnsignedByteType >( cellSize ) );
+		CellImg< UnsignedByteType, ByteArray > cellContainer = ( CellImg< UnsignedByteType, ByteArray > ) createImage( dimensions, new CellImgFactory<>( new UnsignedByteType(), cellSize ) );
 		return cellContainer;
 	}
 
@@ -541,7 +540,7 @@ public class ImglibBenchmark {
 			return null;
 		if ( numDimensions > 5 )
 			return null;
-		final ByteImagePlus<UnsignedByteType> imagePlusContainer = ( ByteImagePlus<UnsignedByteType> ) createImage( dimensions, new ImagePlusImgFactory< UnsignedByteType >() );
+		final ByteImagePlus< UnsignedByteType > imagePlusContainer = ( ByteImagePlus< UnsignedByteType > ) createImage( dimensions, new ImagePlusImgFactory<>( new UnsignedByteType() ) );
 		return imagePlusContainer;
 	}
 
@@ -549,13 +548,13 @@ public class ImglibBenchmark {
 		if ( dimensions[ 0 ] * dimensions[ 1 ] > Integer.MAX_VALUE )
 			return null;
 		final
-		ListImg<UnsignedByteType> listContainer = ( ListImg<UnsignedByteType> ) createImage( dimensions, new ListImgFactory< UnsignedByteType >() );
+		ListImg< UnsignedByteType > listContainer = ( ListImg< UnsignedByteType > ) createImage( dimensions, new ListImgFactory<>( new UnsignedByteType() ) );
 		return listContainer;
 	}
 
 	private Img< UnsignedByteType > createImage(final long[] dims, final ImgFactory< UnsignedByteType > cf )
 	{
-		final Img< UnsignedByteType > img = cf.create( dims, new UnsignedByteType() );
+		final Img< UnsignedByteType > img = cf.create( dims );
 		long i = 0;
 		for ( final UnsignedByteType t : img )
 			t.set( ( int ) ( i++ % 256 ) );

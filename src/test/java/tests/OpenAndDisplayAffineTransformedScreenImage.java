@@ -61,7 +61,7 @@ public class OpenAndDisplayAffineTransformedScreenImage
 
 		final ImgOpener io = new ImgOpener();
 		//final RandomAccessibleInterval< UnsignedShortType > img = io.openImg( "/home/saalfeld/phd/light-microscopy/presentation/saalfeld-05-05-4-DPX-05_L1_Sum.lsm", new ArrayImgFactory< UnsignedShortType >(), new UnsignedShortType());
-		final ImgPlus< UnsignedShortType > imgPlus = io.openImg( "/home/saalfeld/phd/light-microscopy/presentation/saalfeld-05-05-4-DPX-05_L1_Sum.0.tif", new ArrayImgFactory< UnsignedShortType >(), new UnsignedShortType());
+		final ImgPlus< UnsignedShortType > imgPlus = io.openImgs( "/home/saalfeld/phd/light-microscopy/presentation/saalfeld-05-05-4-DPX-05_L1_Sum.0.tif", new ArrayImgFactory<>( new UnsignedShortType() ) ).get( 0 );
 		// TODO - using averageScale() introduces error for nonlinear axes
 		final double scale0 = imgPlus.averageScale(0);
 		final double scale1 = imgPlus.averageScale(1);

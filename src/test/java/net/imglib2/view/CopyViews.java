@@ -28,7 +28,9 @@
 package net.imglib2.view;
 
 import ij.ImageJ;
-import io.scif.img.ImgOpener;
+
+import io.scif.img.IO;
+
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
@@ -47,7 +49,7 @@ public class CopyViews
 {
 	public static < T extends Type< T > > void copy( RandomAccessible< T > src, RandomAccessibleInterval< T > dst )
 	{
-		final RandomAccessibleIntervalCursor< T > dstCursor = new RandomAccessibleIntervalCursor< T >( dst );
+		final RandomAccessibleIntervalCursor< T > dstCursor = new RandomAccessibleIntervalCursor<>( dst );
 		final RandomAccess< T > srcAccess = src.randomAccess( dst );		
 		while ( dstCursor.hasNext() )
 		{
@@ -59,7 +61,7 @@ public class CopyViews
 
 	public static < T extends Type< T > > void copySrc( RandomAccessibleInterval< T > src, RandomAccessible< T > dst )
 	{
-		final RandomAccessibleIntervalCursor< T > srcCursor = new RandomAccessibleIntervalCursor< T >( src );
+		final RandomAccessibleIntervalCursor< T > srcCursor = new RandomAccessibleIntervalCursor<>( src );
 		final RandomAccess< T > dstAccess = dst.randomAccess( src );		
 		while ( srcCursor.hasNext() )
 		{
@@ -72,14 +74,13 @@ public class CopyViews
 	final static public void main( final String[] args )
 	{
 		new ImageJ();
-		ImgFactory< FloatType > imgFactory = new ArrayImgFactory< FloatType >();
+		ImgFactory< FloatType > imgFactory = new ArrayImgFactory<>( new FloatType() );
 
 		Img< FloatType > inputImg = null;
 		try
 		{
-			final ImgOpener io = new ImgOpener();
-			inputImg = io.openImg( "/home/tobias/workspace/data/wingclip.tif", imgFactory, new FloatType() );
-			//inputImg = io.openImg( ImgIOUtils.cacheId( "http://www.wv.inf.tu-dresden.de/~tobias/wingclip.tif" ), imgFactory, new FloatType() );
+			inputImg = IO.openImgs( "/home/tobias/workspace/data/wingclip.tif", imgFactory ).get( 0 );
+			//inputImg = IO.openImgs( ImgIOUtils.cacheId( "http://www.wv.inf.tu-dresden.de/~tobias/wingclip.tif" ), imgFactory ).get( 0 );
 		}
 		catch ( Exception e )
 		{
@@ -91,7 +92,7 @@ public class CopyViews
 		final long h = inputImg.dimension( 1 );
 
 		final long[] dim = new long[] { w * 2, h * 2 };
-		Img< FloatType > outputImg = imgFactory.create( dim, new FloatType() );
+		Img< FloatType > outputImg = imgFactory.create( dim );
 		
 		copy( inputImg, Views.offsetInterval( outputImg, new long[] {0,0}, new long[] {w,h} ) );
 		copy( Views.zeroMin( Views.invertAxis( inputImg, 0 ) ), Views.offsetInterval( outputImg, new long[] {w,0}, new long[] {w,h} ) );

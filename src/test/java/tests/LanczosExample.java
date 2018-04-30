@@ -31,8 +31,10 @@ import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
 import ij.process.ColorProcessor;
+
+import io.scif.img.IO;
 import io.scif.img.ImgIOException;
-import io.scif.img.ImgOpener;
+
 import net.imagej.ImgPlus;
 import net.imglib2.RandomAccessible;
 import net.imglib2.converter.RealARGBConverter;
@@ -60,9 +62,8 @@ public class LanczosExample
 	{
 		new ImageJ();
 
-		final ImgOpener io = new ImgOpener();
-		//final RandomAccessibleInterval< UnsignedShortType > img = io.openImg( "/home/saalfeld/phd/light-microscopy/presentation/saalfeld-05-05-4-DPX-05_L1_Sum.lsm", new ArrayImgFactory< UnsignedShortType >(), new UnsignedShortType());
-		final ImgPlus< UnsignedShortType > imgPlus = io.openImg( "/home/saalfeld/Desktop/l1-cns.tif", new ArrayImgFactory< UnsignedShortType >(), new UnsignedShortType());
+		//final RandomAccessibleInterval< UnsignedShortType > img = IO.openImg( "/home/saalfeld/phd/light-microscopy/presentation/saalfeld-05-05-4-DPX-05_L1_Sum.lsm", new ArrayImgFactory< UnsignedShortType >(), new UnsignedShortType());
+		final ImgPlus< UnsignedShortType > imgPlus = IO.openImgs( "/home/saalfeld/Desktop/l1-cns.tif", new ArrayImgFactory<>( new UnsignedShortType() ) ).get( 0 );
 
 		// TODO - using averageScale() introduces error for nonlinear axes
 		final double scale0 = imgPlus.averageScale(0);
@@ -80,14 +81,14 @@ public class LanczosExample
 
 //		final InterpolatorFactory< UnsignedShortType, RandomAccessible< UnsignedShortType > > interpolatorFactory = new NearestNeighborInterpolatorFactory< UnsignedShortType >();
 //		final InterpolatorFactory< UnsignedShortType, RandomAccessible< UnsignedShortType > > interpolatorFactory = new NLinearInterpolatorFactory< UnsignedShortType >();
-		final InterpolatorFactory< UnsignedShortType, RandomAccessible< UnsignedShortType > > interpolatorFactory = new LanczosInterpolatorFactory< UnsignedShortType >();
+		final InterpolatorFactory< UnsignedShortType, RandomAccessible< UnsignedShortType > > interpolatorFactory = new LanczosInterpolatorFactory<>();
 
 		final RandomAccessible< UnsignedShortType > extendedImg = Views.extendValue( imgPlus, new UnsignedShortType() );
-		final Interpolant< UnsignedShortType, RandomAccessible< UnsignedShortType > > interpolant = new Interpolant< UnsignedShortType, RandomAccessible< UnsignedShortType > >( extendedImg, interpolatorFactory );
-		final AffineRandomAccessible< UnsignedShortType, AffineGet > mapping = new AffineRandomAccessible< UnsignedShortType, AffineGet >( interpolant, affine );
+		final Interpolant< UnsignedShortType, RandomAccessible< UnsignedShortType > > interpolant = new Interpolant<>( extendedImg, interpolatorFactory );
+		final AffineRandomAccessible< UnsignedShortType, AffineGet > mapping = new AffineRandomAccessible<>( interpolant, affine );
 
 		final ARGBScreenImage screenImage = new ARGBScreenImage( ( int )imgPlus.dimension( 0 ), ( int )imgPlus.dimension( 1 ) );
-		final IterableIntervalProjector2D< UnsignedShortType, ARGBType > projector = new IterableIntervalProjector2D< UnsignedShortType, ARGBType >( 0, 1, mapping, screenImage, new RealARGBConverter< UnsignedShortType >( 0, 4095 ) );
+		final IterableIntervalProjector2D< UnsignedShortType, ARGBType > projector = new IterableIntervalProjector2D<>( 0, 1, mapping, screenImage, new RealARGBConverter< UnsignedShortType >( 0, 4095 ) );
 
 		final ColorProcessor cp = new ColorProcessor( screenImage.image() );
 		final ImagePlus imp = new ImagePlus( "argbScreenProjection", cp );

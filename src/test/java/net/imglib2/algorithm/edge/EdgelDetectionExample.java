@@ -32,8 +32,9 @@ import ij.ImageJ;
 import ij.ImagePlus;
 import ij.gui.Line;
 import ij.gui.Overlay;
+
+import io.scif.img.IO;
 import io.scif.img.ImgIOException;
-import io.scif.img.ImgOpener;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -50,10 +51,10 @@ public class EdgelDetectionExample
 	{
 		new ImageJ();
 
-		final ImgFactory< FloatType > imgFactory = new ArrayImgFactory< FloatType >();
+		final ImgFactory< FloatType > imgFactory = new ArrayImgFactory<>( new FloatType() );
 
 		// load image
-		final Img< FloatType > img = new ImgOpener().openImg( "/home/tobias/workspace/HisYFP/blob.tif", imgFactory, new FloatType() );
+		final Img< FloatType > img = IO.openImgs( "/home/tobias/workspace/HisYFP/blob.tif", imgFactory ).get( 0 );
 
 		// detect edgels
 		final ArrayList< Edgel > edgels = SubpixelEdgelDetection.getEdgels( img, imgFactory, 2 );

@@ -181,13 +181,13 @@ public class KNearestNeighborSearchBehavior
 	
 	final static public void main( final String[] args )
 	{
-		final RealPointSampleList< UnsignedByteType > list = new RealPointSampleList< UnsignedByteType >( 2 );
+		final RealPointSampleList< UnsignedByteType > list = new RealPointSampleList<>( 2 );
 		for ( int i = 0; i < samples.length; ++i )
 			list.add( new RealPoint( coordinates[ i ] ), new UnsignedByteType( samples[ i ] ) );
 		
-		final KDTree< UnsignedByteType > kdtree = new KDTree< UnsignedByteType >( list );
+		final KDTree< UnsignedByteType > kdtree = new KDTree<>( list );
 		
-		final ImagePlusImgFactory< UnsignedByteType > factory = new ImagePlusImgFactory< UnsignedByteType >();
+		final ImagePlusImgFactory< UnsignedByteType > factory = new ImagePlusImgFactory<>( new UnsignedByteType() );
 		
 		new ImageJ();
 		
@@ -196,10 +196,10 @@ public class KNearestNeighborSearchBehavior
 		
 		/* nearest neighbor */
 		IJ.log( "Nearest neighbor ..." );
-		final ImagePlusImg< UnsignedByteType, ? > img1 = factory.create( size, new UnsignedByteType() );
+		final ImagePlusImg< UnsignedByteType, ? > img1 = factory.create( size );
 		long t = drawNearestNeighbor(
 				img1,
-				new NearestNeighborSearchOnIterableRealInterval< UnsignedByteType >( list ) );
+				new NearestNeighborSearchOnIterableRealInterval<>( list ) );
 		
 		IJ.log( t + "ms " );
 		
@@ -216,10 +216,10 @@ public class KNearestNeighborSearchBehavior
 		
 		/* nearest neighbor through k-nearest-neighbor search */
 		IJ.log( "Nearest neighbor through k-nearest-neighbor search ..."  );
-		final ImagePlusImg< UnsignedByteType, ? > img2 = factory.create( size, new UnsignedByteType() );
+		final ImagePlusImg< UnsignedByteType, ? > img2 = factory.create( size );
 		t = drawNearestNeighbor(
 				img2,
-				new KNearestNeighborSearchOnIterableRealInterval< UnsignedByteType >( list, 1 ) );
+				new KNearestNeighborSearchOnIterableRealInterval<>( list, 1 ) );
 		
 		IJ.log( t + "ms " );
 		
@@ -246,8 +246,8 @@ public class KNearestNeighborSearchBehavior
 			for ( double p = 0; p <= 2; p += 0.5, ++np )
 			{
 				IJ.log( "  k=" + k + " p=" + String.format( "%.2f", p ) );
-				final ImagePlusImg< UnsignedByteType, ? > img3 = factory.create( size, new UnsignedByteType() );
-				t += drawWeightedByDistanceInterpolator( img3, new KNearestNeighborSearchOnIterableRealInterval< UnsignedByteType >( list, k ), k, p, 0, 255 );
+				final ImagePlusImg< UnsignedByteType, ? > img3 = factory.create( size );
+				t += drawWeightedByDistanceInterpolator( img3, new KNearestNeighborSearchOnIterableRealInterval<>( list, k ), k, p, 0, 255 );
 				try
 				{
 					distanceStack.addSlice( "k=" + k + " p=" + String.format( "%.2f", p ), img3.getImagePlus().getProcessor() );
@@ -275,10 +275,10 @@ public class KNearestNeighborSearchBehavior
 		
 		/* nearest neighbor */
 		IJ.log( "Nearest neighbor ..." );
-		final ImagePlusImg< UnsignedByteType, ? > img4 = factory.create( size, new UnsignedByteType() );
+		final ImagePlusImg< UnsignedByteType, ? > img4 = factory.create( size );
 		t = drawNearestNeighbor(
 				img4,
-				new NearestNeighborSearchOnKDTree< UnsignedByteType >( kdtree ) );
+				new NearestNeighborSearchOnKDTree<>( kdtree ) );
 		
 		IJ.log( t + "ms " );
 		
@@ -295,10 +295,10 @@ public class KNearestNeighborSearchBehavior
 		
 		/* nearest neighbor through k-nearest-neighbor search */
 		IJ.log( "Nearest neighbor through k-nearest-neighbor search ..."  );
-		final ImagePlusImg< UnsignedByteType, ? > img5 = factory.create( size, new UnsignedByteType() );
+		final ImagePlusImg< UnsignedByteType, ? > img5 = factory.create( size );
 		t = drawNearestNeighbor(
 				img5,
-				new KNearestNeighborSearchOnKDTree< UnsignedByteType >( kdtree, 1 ) );
+				new KNearestNeighborSearchOnKDTree<>( kdtree, 1 ) );
 		
 		IJ.log( t + "ms " );
 		
@@ -325,10 +325,10 @@ public class KNearestNeighborSearchBehavior
 			for ( double p = 0; p <= 2; p += 0.5, ++np )
 			{
 				IJ.log( "  k=" + k + " p=" + String.format( "%.2f", p ) );
-				final ImagePlusImg< UnsignedByteType, ? > img3 = factory.create( size, new UnsignedByteType() );
+				final ImagePlusImg< UnsignedByteType, ? > img3 = factory.create( size );
 				t += drawWeightedByDistanceInterpolator(
 						img3,
-						new KNearestNeighborSearchOnKDTree< UnsignedByteType >( kdtree, k ), k, p, 0, 255 );
+						new KNearestNeighborSearchOnKDTree<>( kdtree, k ), k, p, 0, 255 );
 				try
 				{
 					distanceStack2.addSlice( "k=" + k + " p=" + String.format( "%.2f", p ), img3.getImagePlus().getProcessor() );

@@ -52,10 +52,10 @@ public class OpenAndDisplayScreenImage
 		new ImageJ();
 
 		final ImgOpener io = new ImgOpener();
-		final RandomAccessibleInterval< FloatType > img = io.openImg( "/home/tobias/workspace/data/73_float.tif", new ArrayImgFactory<FloatType>(), new FloatType());
+		final RandomAccessibleInterval< FloatType > img = io.openImgs( "/home/tobias/workspace/data/73_float.tif", new ArrayImgFactory<>( new FloatType() ) ).get( 0 );
 
 		final ARGBScreenImage screenImage = new ARGBScreenImage( ( int )img.dimension( 0 ), ( int )img.dimension( 1 ) );
-		final IterableIntervalProjector2D< FloatType, ARGBType > projector = new IterableIntervalProjector2D< FloatType, ARGBType >(0, 1, img, screenImage, new RealARGBConverter< FloatType >( 0, 127 ) );
+		final IterableIntervalProjector2D< FloatType, ARGBType > projector = new IterableIntervalProjector2D<>( 0, 1, img, screenImage, new RealARGBConverter< FloatType >( 0, 127 ) );
 
 		final ColorProcessor cp = new ColorProcessor( screenImage.image() );
 		final ImagePlus imp = new ImagePlus( "argbScreenProjection", cp );

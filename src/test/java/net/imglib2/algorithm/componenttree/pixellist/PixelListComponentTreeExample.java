@@ -77,8 +77,8 @@ public class PixelListComponentTreeExample
 
 	public static void main( String[] args )
 	{
-		ImgFactory< IntType > imgFactory = new ArrayImgFactory< IntType >();
-		Img< IntType > input = imgFactory.create( dimensions, new IntType() );
+		ImgFactory< IntType > imgFactory = new ArrayImgFactory<>( new IntType() );
+		Img< IntType > input = imgFactory.create( dimensions );
 
 		// fill input image with test data
 		int[] pos = new int[ 2 ];

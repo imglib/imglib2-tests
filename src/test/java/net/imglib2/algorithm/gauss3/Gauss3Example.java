@@ -27,8 +27,9 @@
 
 package net.imglib2.algorithm.gauss3;
 
+import io.scif.img.IO;
 import io.scif.img.ImgIOException;
-import io.scif.img.ImgOpener;
+
 import net.imglib2.exception.IncompatibleTypeException;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgFactory;
@@ -47,7 +48,7 @@ public class Gauss3Example
 	public static void main( final String[] args ) throws ImgIOException
 	{
 		final String fn = "/home/tobias/workspace/data/DrosophilaWing.tif";
-		final Img< FloatType > img = new ImgOpener().openImg( fn, new ArrayImgFactory< FloatType >(), new FloatType() );
+		final Img< FloatType > img = IO.openImgs( fn, new ArrayImgFactory<>( new FloatType() ) ).get( 0 );
 
 		final long[] dims = new long[ img.numDimensions() ];
 		img.dimensions( dims );

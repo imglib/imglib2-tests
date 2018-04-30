@@ -28,8 +28,10 @@
 package tests;
 
 import ij.ImageJ;
+
+import io.scif.img.IO;
 import io.scif.img.ImgIOException;
-import io.scif.img.ImgOpener;
+
 import net.imglib2.converter.ChannelARGBConverter;
 import net.imglib2.display.projector.composite.CompositeXYProjector;
 import net.imglib2.exception.IncompatibleTypeException;
@@ -47,13 +49,13 @@ public class CompositeXYProjectorBenchmark
 
 	public CompositeXYProjectorBenchmark( final String filename ) throws ImgIOException, IncompatibleTypeException
 	{
-		// open with ImgOpener using an ArrayImgFactory
-		final ArrayImgFactory< UnsignedByteType > factory = new ArrayImgFactory< UnsignedByteType >();
-		img = new ImgOpener().openImg( filename, factory, new UnsignedByteType() );
+		// open with SCIFIO using an ArrayImgFactory
+		final ArrayImgFactory< UnsignedByteType > factory = new ArrayImgFactory<>(new UnsignedByteType ());
+		img = IO.openImgs( filename, factory ).get( 0 );
 		final long[] dim = new long[ img.numDimensions() - 1 ];
 		for ( int d = 0; d < dim.length; ++d )
 			dim[ d ] = img.dimension( d );
-		argbImg = new ArrayImgFactory< ARGBType >().create( dim, new ARGBType() );
+		argbImg = new ArrayImgFactory<>( new ARGBType() ).create( dim );
 		convert( img, argbImg );
 
 		ImageJFunctions.show( argbImg );
@@ -61,7 +63,7 @@ public class CompositeXYProjectorBenchmark
 
 	public void convert( final Img< UnsignedByteType > in,  final Img< ARGBType > out )
 	{
-		final CompositeXYProjector< UnsignedByteType > projector = new CompositeXYProjector< UnsignedByteType >( in, out, ChannelARGBConverter.converterListRGBA, 2 );
+		final CompositeXYProjector< UnsignedByteType > projector = new CompositeXYProjector<>( in, out, ChannelARGBConverter.converterListRGBA, 2 );
 		projector.setComposite( true );
 //		projector.setComposite( 0, false );
 //		projector.setComposite( 1, true );

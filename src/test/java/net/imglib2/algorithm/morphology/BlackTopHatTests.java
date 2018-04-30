@@ -27,8 +27,9 @@
 package net.imglib2.algorithm.morphology;
 
 import ij.ImageJ;
+
+import io.scif.img.IO;
 import io.scif.img.ImgIOException;
-import io.scif.img.ImgOpener;
 import io.scif.img.SCIFIOImgPlus;
 
 import java.io.File;
@@ -50,7 +51,7 @@ public class BlackTopHatTests
 	{
 		ImageJ.main( args );
 		final File file = new File( "DrosophilaWing.tif" );
-		final SCIFIOImgPlus img = new ImgOpener().openImgs( file.getAbsolutePath() ).get( 0 );
+		final SCIFIOImgPlus img = IO.openImgs( file.getAbsolutePath() ).get( 0 );
 		final Img< UnsignedByteType > imgInv = img.copy();
 		final Cursor< UnsignedByteType > cursor = img.cursor();
 		final Cursor< UnsignedByteType > cursor2 = imgInv.cursor();
@@ -86,7 +87,7 @@ public class BlackTopHatTests
 		 * To target
 		 */
 
-		final Img img2 = img.factory().create( interval, new UnsignedByteType() );
+		final Img img2 = img.factory().create( interval );
 		final long[] translation = new long[ interval.numDimensions() ];
 		interval.min( translation );
 		final IntervalView translate = Views.translate( img2, translation );

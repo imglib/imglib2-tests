@@ -53,8 +53,8 @@ public class EllipsoidNeighborhoodExample
 	public static void example2()
 	{
 
-		final ImgFactory< UnsignedByteType > imgFactory = new ArrayImgFactory< UnsignedByteType >();
-		Img< UnsignedByteType > image = imgFactory.create( new int[] { DIM, DIM, DIM }, new UnsignedByteType() );
+		final ImgFactory< UnsignedByteType > imgFactory = new ArrayImgFactory<>( new UnsignedByteType() );
+		Img< UnsignedByteType > image = imgFactory.create( DIM, DIM, DIM );
 
 		long[] center = new long[ 3 ];
 		long[] span = new long[ 3 ];
@@ -70,7 +70,7 @@ public class EllipsoidNeighborhoodExample
 			span[ 1 ] = ( long ) ( Math.random() / 10 * DIM );
 			span[ 2 ] = ( long ) ( Math.random() / 10 * DIM );
 
-			EllipsoidNeighborhood< UnsignedByteType > ellipsoid = new EllipsoidNeighborhood< UnsignedByteType >( image, center, span );
+			EllipsoidNeighborhood< UnsignedByteType > ellipsoid = new EllipsoidNeighborhood<>( image, center, span );
 
 			System.out.println( "Center: " + Util.printCoordinates( center ) );// DEBUG
 			System.out.println( "Span: " + Util.printCoordinates( span ) );// DEBUG
@@ -90,14 +90,14 @@ public class EllipsoidNeighborhoodExample
 
 	public static void example1()
 	{
-		final ImgFactory< UnsignedShortType > imgFactory = new ArrayImgFactory< UnsignedShortType >();
-		Img< UnsignedShortType > image = imgFactory.create( new int[] { DIM, DIM, DIM }, new UnsignedShortType() );
+		final ImgFactory< UnsignedShortType > imgFactory = new ArrayImgFactory<>( new UnsignedShortType() );
+		Img< UnsignedShortType > image = imgFactory.create( DIM, DIM, DIM );
 
 		long[] center = new long[] { 50, 50, 50 }; // the middle
 		long[] span = new long[] { 0, 10, 10 };
 
 		// Write into the image
-		EllipsoidNeighborhood< UnsignedShortType > ellipsoid = new EllipsoidNeighborhood< UnsignedShortType >( image, center, span );
+		EllipsoidNeighborhood< UnsignedShortType > ellipsoid = new EllipsoidNeighborhood<>( image, center, span );
 
 		int val = 250;
 		for ( UnsignedShortType pixel : ellipsoid )
@@ -111,8 +111,8 @@ public class EllipsoidNeighborhoodExample
 
 	public static void example3()
 	{
-		final ImgFactory< UnsignedByteType > imgFactory = new ArrayImgFactory< UnsignedByteType >();
-		Img< UnsignedByteType > image = imgFactory.create( new int[] { DIM, DIM, DIM }, new UnsignedByteType() );
+		final ImgFactory< UnsignedByteType > imgFactory = new ArrayImgFactory<>( new UnsignedByteType() );
+		Img< UnsignedByteType > image = imgFactory.create( DIM, DIM, DIM );
 
 		long[][] centers = new long[][] { { 50, 50, 50 }, { 20, 20, 50 }, { 20, 70, 50 }, { 70, 70, 50 }, { 70, 20, 50 }
 
@@ -122,7 +122,7 @@ public class EllipsoidNeighborhoodExample
 		for ( int i = 0; i < spans.length; i++ )
 		{
 
-			EllipsoidNeighborhood< UnsignedByteType > ellipsoid = new EllipsoidNeighborhood< UnsignedByteType >( image, centers[i], spans[i] );
+			EllipsoidNeighborhood< UnsignedByteType > ellipsoid = new EllipsoidNeighborhood<>( image, centers[ i ], spans[ i ] );
 
 			// Write into the image
 			int val = 200;

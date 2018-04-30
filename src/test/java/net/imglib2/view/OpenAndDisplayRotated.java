@@ -30,8 +30,10 @@ package net.imglib2.view;
 import ij.ImageJ;
 import ij.ImagePlus;
 import ij.process.ColorProcessor;
+
+import io.scif.img.IO;
 import io.scif.img.ImgIOException;
-import io.scif.img.ImgOpener;
+
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.converter.RealARGBConverter;
 import net.imglib2.display.projector.IterableIntervalProjector2D;
@@ -51,13 +53,10 @@ public class OpenAndDisplayRotated
 {
 	new ImageJ();
 
-	final ImgOpener io = new ImgOpener();
-	final RandomAccessibleInterval< FloatType > img = Views.zeroMin( Views.rotate(
-	        io.openImg( "/home/tobias/workspace/data/73_float.tif", new ArrayImgFactory<FloatType>(), new FloatType()),
-			0, 1 ) );
+	final RandomAccessibleInterval< FloatType > img = Views.zeroMin( Views.rotate( IO.openImgs( "/home/tobias/workspace/data/73_float.tif", new ArrayImgFactory<>( new FloatType() ) ).get( 0 ), 0, 1 ) );
 
 	final ARGBScreenImage screenImage = new ARGBScreenImage( ( int )img.dimension( 0 ), ( int )img.dimension( 1 ) );
-	final IterableIntervalProjector2D< FloatType, ARGBType > projector = new IterableIntervalProjector2D< FloatType, ARGBType >( 0, 1, img, screenImage, new RealARGBConverter< FloatType >( 0, 127 ) );
+	final IterableIntervalProjector2D< FloatType, ARGBType > projector = new IterableIntervalProjector2D<>( 0, 1, img, screenImage, new RealARGBConverter< FloatType >( 0, 127 ) );
 
 	final ColorProcessor cp = new ColorProcessor( screenImage.image() );
 	final ImagePlus imp = new ImagePlus( "argbScreenProjection", cp );

@@ -27,8 +27,10 @@
 package net.imglib2.converter;
 
 import ij.ImageJ;
+
+import io.scif.img.IO;
 import io.scif.img.ImgIOException;
-import io.scif.img.ImgOpener;
+
 import net.imglib2.Cursor;
 import net.imglib2.exception.IncompatibleTypeException;
 import net.imglib2.img.Img;
@@ -47,10 +49,10 @@ public class RealARGBConverterBenchmark
 
 	public RealARGBConverterBenchmark( final String filename ) throws ImgIOException, IncompatibleTypeException
 	{
-		// open with ImgOpener using an ArrayImgFactory
-		final ArrayImgFactory< UnsignedByteType > factory = new ArrayImgFactory< UnsignedByteType >();
-		img = new ImgOpener().openImg( filename, factory, new UnsignedByteType() );
-		argbImg = new ArrayImgFactory< ARGBType >().create( img, new ARGBType() );
+		// open with SCIFIO using an ArrayImgFactory
+		final ArrayImgFactory< UnsignedByteType > factory = new ArrayImgFactory<>( new UnsignedByteType() );
+		img = IO.openImgs( filename, factory ).get( 0 );
+		argbImg = new ArrayImgFactory<>( new ARGBType() ).create( img );
 
 		BenchmarkHelper.benchmarkAndPrint( 15, true, new Runnable()
 		{
@@ -69,7 +71,7 @@ public class RealARGBConverterBenchmark
 	{
 		final Cursor< T > cin = in.cursor();
 		final Cursor< ARGBType > cout = out.cursor();
-		final RealARGBConverter< T > converter = new RealARGBConverter< T >( 0, 1000 );
+		final RealARGBConverter< T > converter = new RealARGBConverter<>( 0, 1000 );
 		while( cin.hasNext() )
 			converter.convert( cin.next(), cout.next() );
 	}

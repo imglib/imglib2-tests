@@ -29,7 +29,9 @@ package net.imglib2.view;
 
 import ij.ImageJ;
 import ij.ImagePlus;
-import io.scif.img.ImgOpener;
+
+import io.scif.img.IO;
+
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessible;
@@ -72,12 +74,11 @@ public class OpenAndDisplayInterpolated
 	{
 		new ImageJ();
 		
-		ImgFactory< FloatType > imgFactory = new ArrayImgFactory< FloatType >();
+		ImgFactory< FloatType > imgFactory = new ArrayImgFactory<>( new FloatType() );
 		Img< FloatType > img = null;
 		try
 		{
-			final ImgOpener io = new ImgOpener();
-			img = io.openImg( "/home/tobias/workspace/data/DrosophilaWing.tif", imgFactory, new FloatType() );
+			img = IO.openImgs( "/home/tobias/workspace/data/DrosophilaWing.tif", imgFactory ).get( 0 );
 		}
 		catch ( Exception e )
 		{
@@ -85,7 +86,7 @@ public class OpenAndDisplayInterpolated
 			return;
 		}
 
-		Img< FloatType > interpolatedImg = imgFactory.create( new long[] {200, 200}, new FloatType () );
+		Img< FloatType > interpolatedImg = imgFactory.create( 200, 200 );
 				
 		double[] offset;
 		double scale;
@@ -93,7 +94,7 @@ public class OpenAndDisplayInterpolated
 
 		offset = new double[] {50, 10};
 		scale = 1.0;
-		interpolatorFactory = new NLinearInterpolatorFactory< FloatType >();
+		interpolatorFactory = new NLinearInterpolatorFactory<>();
 		final ImagePlus imp = ImageJFunctions.show( interpolatedImg );
 		imp.getImageStack().getProcessor( 0 ).setMinAndMax( 0, 255 );
 		for ( int i=0; i<2000; ++i ) {
@@ -107,7 +108,7 @@ public class OpenAndDisplayInterpolated
 
 		offset = new double[] {50, 10};
 		scale = 1.0;
-		interpolatorFactory = new NearestNeighborInterpolatorFactory< FloatType >();
+		interpolatorFactory = new NearestNeighborInterpolatorFactory<>();
 		for ( int i=0; i<2000; ++i ) {
 			copyInterpolatedGeneric( img, interpolatedImg, offset, scale, interpolatorFactory );
 			imp.getImageStack().getProcessor( 0 ); // update the internal img data in the underlying ImageJVirtualStack

@@ -27,8 +27,9 @@
 
 package net.imglib2.algorithm.gradient;
 
+import io.scif.img.IO;
 import io.scif.img.ImgIOException;
-import io.scif.img.ImgOpener;
+
 import net.imagej.ImgPlus;
 import net.imglib2.Interval;
 import net.imglib2.img.Img;
@@ -44,7 +45,7 @@ public class GradientExample
 {
 	public static < T extends RealType< T > & NativeType< T > > void doit( final T type ) throws ImgIOException
 	{
-		final ImgPlus< T > input = new ImgOpener().openImg( "/home/tobias/workspace/data/img1.tif", new ArrayImgFactory< T >(), type );
+		final ImgPlus< T > input = IO.openImgs( "/home/tobias/workspace/data/img1.tif", new ArrayImgFactory<>( type ) ).get( 0 );
 		ImageJFunctions.show( input );
 
 		final int n = input.numDimensions();
@@ -52,7 +53,7 @@ public class GradientExample
 		for ( int d = 0; d < n; ++d )
 			dim[ d ] = input.dimension( d );
 		dim[ n ] = n;
-		final Img< T > gradients = new ArrayImgFactory< T >().create( dim, type );
+		final Img< T > gradients = new ArrayImgFactory<>( type ).create( dim );
 
 		// bounding box for computation of gradients
 		// we require a border of 1 pixel wrt. to the input image

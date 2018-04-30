@@ -1,12 +1,12 @@
 package net.imglib2.roi.labeling;
 
-import java.awt.Rectangle;
-import java.io.IOException;
-import java.util.Set;
-
 import ij.ImagePlus;
 import ij.gui.NewImage;
 import ij.process.ImageProcessor;
+
+import java.awt.Rectangle;
+import java.util.Set;
+
 import net.imglib2.Cursor;
 import net.imglib2.Dimensions;
 import net.imglib2.RandomAccessibleInterval;
@@ -94,7 +94,7 @@ public class LabelingExample
 
 		final Dimensions dims = img2;
 		final IntType t = new IntType();
-		final RandomAccessibleInterval< IntType > img = Util.getArrayOrCellImgFactory( dims, t ).create( dims, t );
+		final RandomAccessibleInterval< IntType > img = Util.getArrayOrCellImgFactory( dims, t ).create( dims );
 		final ImgLabeling< Integer, IntType > labeling = new ImgLabeling<>( img );
 
 		final Cursor< LabelingType< Integer > > labelCursor = Views.flatIterable( labeling ).cursor();
@@ -109,7 +109,7 @@ public class LabelingExample
 	}
 
 	// Just to run it
-	public static void main( final String... args ) throws IOException
+	public static void main( final String... args )
 	{
 		new LabelingExample();
 	}

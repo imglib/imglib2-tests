@@ -27,8 +27,9 @@
 
 package net.imglib2.algorithm.neighborhood;
 
+import io.scif.img.IO;
 import io.scif.img.ImgIOException;
-import io.scif.img.ImgOpener;
+
 import net.imglib2.Interval;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
@@ -63,10 +64,9 @@ public class MinFilterExample
 		final String fn = "/home/tobias/workspace/data/DrosophilaWing.tif";
 		final int span = 3;
 
-		final ArrayImgFactory< FloatType > factory = new ArrayImgFactory< FloatType >();
-		final FloatType type = new FloatType();
-		final Img< FloatType > imgInput = new ImgOpener().openImg( fn, factory, type );
-		final Img< FloatType > imgOutput = factory.create( imgInput, type );
+		final ArrayImgFactory< FloatType > factory = new ArrayImgFactory<>( new FloatType() );
+		final Img< FloatType > imgInput = IO.openImgs( fn, factory ).get( 0 );
+		final Img< FloatType > imgOutput = factory.create( imgInput );
 
 		final Interval computationInterval = Intervals.expand( imgInput, -span );
 		final RandomAccessibleInterval< FloatType > input = Views.interval( imgInput, computationInterval );

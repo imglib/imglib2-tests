@@ -123,7 +123,7 @@ public class MorphologyOperationsTest {
 		final List<String> words = Arrays.asList(wordArray);
 		Collections.shuffle(words);
 
-		final ListImg<StringType> img = new ListImgFactory<StringType>().create(new long[] { 6l, 6l }, new StringType());
+		final ListImg< StringType > img = new ListImgFactory<>( new StringType() ).create( 6, 6 );
 		final ListCursor<StringType> cursor = img.cursor();
 		for (final String str : words) {
 			cursor.fwd();

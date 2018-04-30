@@ -28,8 +28,10 @@
 package tests;
 
 import ij.ImageJ;
+
+import io.scif.img.IO;
 import io.scif.img.ImgIOException;
-import io.scif.img.ImgOpener;
+
 import net.imglib2.converter.RealARGBConverter;
 import net.imglib2.display.projector.RandomAccessibleProjector2D;
 import net.imglib2.exception.IncompatibleTypeException;
@@ -47,10 +49,10 @@ public class RandomAccessibleProjector2DBenchmark
 
 	public RandomAccessibleProjector2DBenchmark( final String filename ) throws ImgIOException, IncompatibleTypeException
 	{
-		// open with ImgOpener using an ArrayImgFactory
-		final ArrayImgFactory< UnsignedByteType > factory = new ArrayImgFactory< UnsignedByteType >();
-		img = new ImgOpener().openImg( filename, factory, new UnsignedByteType() );
-		argbImg = new ArrayImgFactory< ARGBType >().create( img, new ARGBType() );
+		// open with SCIFIO using an ArrayImgFactory
+		final ArrayImgFactory< UnsignedByteType > factory = new ArrayImgFactory<>( new UnsignedByteType() );
+		img = IO.openImgs( filename, factory ).get( 0 );
+		argbImg = new ArrayImgFactory<>( new ARGBType() ).create( img );
 		convert( img, argbImg );
 
 		ImageJFunctions.show( argbImg );
@@ -58,7 +60,7 @@ public class RandomAccessibleProjector2DBenchmark
 
 	public void convert( final Img< UnsignedByteType > in, final Img< ARGBType > out )
 	{
-		final RandomAccessibleProjector2D< UnsignedByteType, ARGBType > projector = new RandomAccessibleProjector2D< UnsignedByteType, ARGBType >( 0, 1, in, out, new RealARGBConverter< UnsignedByteType >(0, 1000) );
+		final RandomAccessibleProjector2D< UnsignedByteType, ARGBType > projector = new RandomAccessibleProjector2D<>( 0, 1, in, out, new RealARGBConverter< UnsignedByteType >( 0, 1000 ) );
 		for ( int iteration = 0; iteration < 10; ++iteration )
 		{
 			final long start = System.currentTimeMillis();

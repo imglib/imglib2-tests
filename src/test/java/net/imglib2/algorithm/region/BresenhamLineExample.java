@@ -41,13 +41,13 @@ public class BresenhamLineExample {
 		int size = 256;
 		double[] angles = new double[] { 0 , 45 , 90, 135 , 180 , 225 , 270, 315 };
 		
-		final ImgFactory< UnsignedByteType > imgFactory = new ArrayImgFactory<UnsignedByteType>();
-		Img<UnsignedByteType> image = imgFactory.create(new int[] { size, size }, new UnsignedByteType());
+		final ImgFactory< UnsignedByteType > imgFactory = new ArrayImgFactory<>( new UnsignedByteType() );
+		Img< UnsignedByteType > image = imgFactory.create( size, size );
 		
 		double angle;
 		Point P1, P2;
 		long x1, x2, y1, y2;
-		BresenhamLine<UnsignedByteType> line = new BresenhamLine<UnsignedByteType>(image);
+		BresenhamLine<UnsignedByteType> line = new BresenhamLine<>(image);
 		
 		for (int i = 0; i < angles.length; i++) {
 			

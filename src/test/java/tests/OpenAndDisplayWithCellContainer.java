@@ -28,7 +28,9 @@
 package tests;
 
 import ij.ImageJ;
-import io.scif.img.ImgOpener;
+
+import io.scif.img.IO;
+
 import net.imglib2.img.Img;
 import net.imglib2.img.ImgFactory;
 import net.imglib2.img.cell.CellImgFactory;
@@ -48,9 +50,8 @@ public class OpenAndDisplayWithCellContainer
 		Img< FloatType > img = null;
 		try
 		{
-			ImgFactory< FloatType > imgFactory = new CellImgFactory<FloatType>( new int[] {64, 64} );
-			final ImgOpener io = new ImgOpener();
-			img = io.openImg( "/home/tobias/workspace/data/73_float.tif", imgFactory, new FloatType() );
+			ImgFactory< FloatType > imgFactory = new CellImgFactory<>( new FloatType(), 64, 64 );
+			img = IO.openImgs( "/home/tobias/workspace/data/73_float.tif", imgFactory ).get( 0 );
 		}
 		catch ( Exception e )
 		{

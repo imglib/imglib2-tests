@@ -28,15 +28,14 @@ package net.imglib2.algorithm.pde;
 
 import ij.ImageJ;
 import ij.ImagePlus;
+
+import io.scif.img.IO;
 import io.scif.img.ImgIOException;
-import io.scif.img.ImgOpener;
 
 import java.io.File;
 
 import net.imglib2.exception.IncompatibleTypeException;
 import net.imglib2.img.Img;
-import net.imglib2.img.ImgFactory;
-import net.imglib2.img.array.ArrayImgFactory;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.RealType;
@@ -52,18 +51,16 @@ public class AnisotropicDiffusionExample {
 //		File file = new File( "/Users/tinevez/Desktop/Data/StarryNight.tif");
 //		File file = new File( "/Users/tinevez/Desktop/Data/cross2.tif");
 
-		ImgFactory< ? > imgFactory = new ArrayImgFactory< T >();
-		
-		Img< T > image = (Img< T >) new ImgOpener().openImg( file.getAbsolutePath(), imgFactory );
-		Img<T> copy = image.copy();
+		Img< T > image = ( Img< T > ) IO.openImgs( file.getAbsolutePath() ).get( 0 );
+		Img< T > copy = image.copy();
 
 		// Display it via ImgLib using ImageJ
 		new ImageJ();
 
 		// Compute tensor
 		
-		MomentOfInertiaTensor2D<T> tensor = new MomentOfInertiaTensor2D<T>(image, 9);
-//		CoherenceEnhancingDiffusionTensor2D<T> tensor = new CoherenceEnhancingDiffusionTensor2D<T>(image);
+		MomentOfInertiaTensor2D< T > tensor = new MomentOfInertiaTensor2D<>( image, 9 );
+		//		CoherenceEnhancingDiffusionTensor2D<T> tensor = new CoherenceEnhancingDiffusionTensor2D<T>(image);
 		
 		
 		tensor.process();
@@ -74,8 +71,8 @@ public class AnisotropicDiffusionExample {
 
 		// Instantiate diffusion solver
 		
-		NonNegativityDiffusionScheme2D<T> algo = new NonNegativityDiffusionScheme2D<T>(image, diffusionTensor);
-//		StandardDiffusionScheme2D<T> algo = new StandardDiffusionScheme2D<T>(image, diffusionTensor);
+		NonNegativityDiffusionScheme2D< T > algo = new NonNegativityDiffusionScheme2D<>( image, diffusionTensor );
+		//		StandardDiffusionScheme2D<T> algo = new StandardDiffusionScheme2D<T>(image, diffusionTensor);
 
 		for (int i = 0; i < 20; i++) {
 			System.out.println("Iteration "+i);

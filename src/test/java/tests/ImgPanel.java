@@ -178,7 +178,7 @@ public class ImgPanel extends JPanel {
 				imgOpener.getContext().getService(ImgUtilityService.class);
 			final String id = imgUtilityService.cacheId(url);
 			System.out.println("Opening " + id);
-			return (ImgPlus<T>) imgOpener.openImg(id);
+			return ( ImgPlus< T > ) imgOpener.openImgs( id ).get( 0 );
 		}
 		catch (final ImgIOException e) {
 			e.printStackTrace();

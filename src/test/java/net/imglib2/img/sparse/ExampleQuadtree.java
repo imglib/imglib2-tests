@@ -28,7 +28,9 @@
 package net.imglib2.img.sparse;
 
 import ij.ImageJ;
-import io.scif.img.ImgOpener;
+
+import io.scif.img.IO;
+
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
 import net.imglib2.img.Img;
@@ -44,11 +46,10 @@ public class ExampleQuadtree
 		new ImageJ();
 
 		Img< IntType > array = null;
-		final ImgFactory< IntType > arrayFactory = new ArrayImgFactory< IntType >();
+		final ImgFactory< IntType > arrayFactory = new ArrayImgFactory<>( new IntType() );
 		try
 		{
-			final ImgOpener io = new ImgOpener();
-			array = io.openImg( "/home/tobias/workspace/data/quadtree.tif", arrayFactory, new IntType() );
+			array = IO.openImgs( "/home/tobias/workspace/data/quadtree.tif", arrayFactory ).get( 0 );
 		}
 		catch ( final Exception e )
 		{
@@ -58,8 +59,8 @@ public class ExampleQuadtree
 
 		ImageJFunctions.show( array, "array" );
 
-		final NtreeImgFactory< IntType > ntreeFactory = new NtreeImgFactory< IntType >();
-		final Img< IntType > quadtree = ntreeFactory.create( array, new IntType() );
+		final NtreeImgFactory< IntType > ntreeFactory = new NtreeImgFactory<>( new IntType() );
+		final Img< IntType > quadtree = ntreeFactory.create( array );
 
 		// copy to sparse img
 		final Cursor< IntType > dst = quadtree.localizingCursor();

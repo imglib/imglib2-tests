@@ -58,7 +58,7 @@ public class ConnectedComponentsExample
 		ImageJ.main( args );
 
 		final String fn = "/Users/pietzsch/Desktop/data/cca2.tif";
-		final RandomAccessibleInterval< UnsignedByteType > img = IO.openImgs( fn, new ArrayImgFactory< UnsignedByteType >(), new UnsignedByteType() ).get( 0 ).getImg();
+		final RandomAccessibleInterval< UnsignedByteType > img = IO.openImgs( fn, new ArrayImgFactory<>( new UnsignedByteType() ) ).get( 0 ).getImg();
 
 		final long[] dims = new long[ img.numDimensions() ];
 		img.dimensions( dims );

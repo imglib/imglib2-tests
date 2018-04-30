@@ -28,7 +28,9 @@
 package net.imglib2.view;
 
 import ij.ImageJ;
-import io.scif.img.ImgOpener;
+
+import io.scif.img.IO;
+
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.img.ImgFactory;
@@ -49,9 +51,8 @@ public class OpenAndDisplaySliceView
 		Img< FloatType > img = null;
 		try
 		{
-			final ImgFactory< FloatType > imgFactory = new ArrayImgFactory< FloatType >();
-			final ImgOpener io = new ImgOpener();
-			img = io.openImg( "/home/tobias/workspace/data/73_float.tif", imgFactory, new FloatType() );
+			final ImgFactory< FloatType > imgFactory = new ArrayImgFactory<>( new FloatType() );
+			img = IO.openImgs( "/home/tobias/workspace/data/73_float.tif", imgFactory ).get( 0 );
 		}
 		catch ( final Exception e )
 		{

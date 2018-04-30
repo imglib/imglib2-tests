@@ -27,8 +27,9 @@
 package net.imglib2.algorithm.morphology;
 
 import ij.ImageJ;
+
+import io.scif.img.IO;
 import io.scif.img.ImgIOException;
-import io.scif.img.ImgOpener;
 import io.scif.img.SCIFIOImgPlus;
 
 import java.io.File;
@@ -118,7 +119,7 @@ public class TopHatTests
 	{
 		ImageJ.main( args );
 		final File file = new File( "/Users/tinevez/Desktop/iconas/Data/Uneven.tif" );
-		final SCIFIOImgPlus img = new ImgOpener().openImgs( file.getAbsolutePath() ).get( 0 );
+		final SCIFIOImgPlus img = IO.openImgs( file.getAbsolutePath() ).get( 0 );
 
 		final Shape strel = new HyperSphereShape( 5 );
 
@@ -145,7 +146,7 @@ public class TopHatTests
 		 * To target
 		 */
 
-		final Img img2 = img.factory().create( interval, new UnsignedByteType() );
+		final Img img2 = img.factory().create( interval );
 		final long[] translation = new long[ interval.numDimensions() ];
 		interval.min( translation );
 		final IntervalView translate = Views.translate( img2, translation );

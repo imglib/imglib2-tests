@@ -86,21 +86,20 @@ public class Gauss3Benchmark
 
 	public static < T > void convolve(
 			final double[] sigmas, final RandomAccessible< T > source, final RandomAccessibleInterval< T > target,
-			final ConvolverFactory< T, T > convf, final ImgFactory< T > imgf, final T type )
+			final ConvolverFactory< T, T > convf, final ImgFactory< T > imgf )
 	{
 		final double[][] halfkernels = Gauss3.halfkernels( sigmas );
 		final int numthreads = Runtime.getRuntime().availableProcessors();
 		final ExecutorService service = Executors.newFixedThreadPool( numthreads );
-		SeparableSymmetricConvolution.convolve( halfkernels, source, target, convf, convf,convf, convf, imgf, type, service );
+		SeparableSymmetricConvolution.convolve( halfkernels, source, target, convf, convf,convf, convf, imgf, service );
 		service.shutdown();
 	}
 
 	public static void benchmarkFloat( final long[] dimensions, final double sigma, final boolean printIndividualTimes, final int numRuns) throws ImgIOException
 	{
-		final FloatType type = new FloatType();
-		final ArrayImgFactory< FloatType > factory = new ArrayImgFactory< FloatType >();
-		final Img< FloatType > img = factory.create( dimensions, type );
-	    final Img< FloatType > convolved = factory.create( dimensions, type );
+		final ArrayImgFactory< FloatType > factory = new ArrayImgFactory<>( new FloatType() );
+		final Img< FloatType > img = factory.create( dimensions );
+		final Img< FloatType > convolved = factory.create( dimensions );
 		fillRandom( img );
 
 	    final int n = img.numDimensions();
@@ -140,7 +139,7 @@ public class Gauss3Benchmark
 			@Override
 			public void run()
 			{
-			    convolve( sigmas, Views.extendMirrorSingle( img ), convolved, FloatConvolverRealTypeBuffered.< FloatType, FloatType >factory(), factory, type );
+			    convolve( sigmas, Views.extendMirrorSingle( img ), convolved, FloatConvolverRealTypeBuffered.< FloatType, FloatType >factory(), factory );
 			}
 	    } );
 
@@ -149,7 +148,7 @@ public class Gauss3Benchmark
 			@Override
 			public void run()
 			{
-			    convolve( sigmas, Views.extendMirrorSingle( img ), convolved, FloatConvolverRealType.< FloatType, FloatType >factory(), factory, type );
+			    convolve( sigmas, Views.extendMirrorSingle( img ), convolved, FloatConvolverRealType.< FloatType, FloatType >factory(), factory );
 			}
 	    } );
 	}
@@ -157,9 +156,9 @@ public class Gauss3Benchmark
 	public static void benchmarkNative( final long[] dimensions, final double sigma, final boolean printIndividualTimes, final int numRuns) throws ImgIOException
 	{
 		final FloatType type = new FloatType();
-		final ArrayImgFactory< FloatType > factory = new ArrayImgFactory< FloatType >();
-		final Img< FloatType > img = factory.create( dimensions, type );
-	    final Img< FloatType > convolved = factory.create( dimensions, type );
+		final ArrayImgFactory< FloatType > factory = new ArrayImgFactory<>( type );
+		final Img< FloatType > img = factory.create( dimensions );
+		final Img< FloatType > convolved = factory.create( dimensions );
 		fillRandom( img );
 
 	    final int n = img.numDimensions();
@@ -183,7 +182,7 @@ public class Gauss3Benchmark
 			@Override
 			public void run()
 			{
-			    convolve( sigmas, Views.extendMirrorSingle( img ), convolved, ConvolverNativeTypeBuffered.factory( type ), factory, type );
+			    convolve( sigmas, Views.extendMirrorSingle( img ), convolved, ConvolverNativeTypeBuffered.factory( type ), factory );
 			}
 	    } );
 
@@ -192,7 +191,7 @@ public class Gauss3Benchmark
 			@Override
 			public void run()
 			{
-			    convolve( sigmas, Views.extendMirrorSingle( img ), convolved, ConvolverNativeType.factory( type ), factory, type );
+			    convolve( sigmas, Views.extendMirrorSingle( img ), convolved, ConvolverNativeType.factory( type ), factory );
 			}
 	    } );
 	}
@@ -200,9 +199,9 @@ public class Gauss3Benchmark
 	public static void benchmarkGeneric( final long[] dimensions, final double sigma, final boolean printIndividualTimes, final int numRuns) throws ImgIOException
 	{
 		final FloatType type = new FloatType();
-		final ArrayImgFactory< FloatType > factory = new ArrayImgFactory< FloatType >();
-		final Img< FloatType > img = factory.create( dimensions, type );
-	    final Img< FloatType > convolved = factory.create( dimensions, type );
+		final ArrayImgFactory< FloatType > factory = new ArrayImgFactory<>( type );
+		final Img< FloatType > img = factory.create( dimensions );
+	    final Img< FloatType > convolved = factory.create( dimensions );
 		fillRandom( img );
 
 	    final int n = img.numDimensions();
@@ -226,7 +225,7 @@ public class Gauss3Benchmark
 			@Override
 			public void run()
 			{
-			    convolve( sigmas, Views.extendMirrorSingle( img ), convolved, ConvolverNumericType.factory( type ), factory, type );
+			    convolve( sigmas, Views.extendMirrorSingle( img ), convolved, ConvolverNumericType.factory( type ), factory );
 			}
 	    } );
 	}
@@ -241,8 +240,8 @@ public class Gauss3Benchmark
 	public static void visualise( final long[] dimensions, final double sigma ) throws ImgIOException
 	{
 		final FloatType type = new FloatType();
-		final ArrayImgFactory< FloatType > factory = new ArrayImgFactory< FloatType >();
-		final Img< FloatType > img = factory.create( dimensions, type );
+		final ArrayImgFactory< FloatType > factory = new ArrayImgFactory<>( type );
+		final Img< FloatType > img = factory.create( dimensions );
 		fillRandom( img );
 		ImageJFunctions.show( img, "source image" );
 
@@ -260,28 +259,28 @@ public class Gauss3Benchmark
 
 		final Point min = new Point( n );
 		img.min( min );
-		final Img< FloatType > convolved2 = factory.create( img, new FloatType() );
+		final Img< FloatType > convolved2 = factory.create( img );
 		new GaussFloat( sigmas, Views.extendMirrorSingle( img ), img, convolved2, min, factory ).call();
 		ImageJFunctions.show( convolved2, "GaussFloat" );
 
-	    final Img< FloatType > convolved5 = factory.create( img, new FloatType() );
-	    convolve( sigmas, Views.extendMirrorSingle( img ), convolved5, ConvolverNumericType.factory( type ), factory, type );
+	    final Img< FloatType > convolved5 = factory.create( img );
+	    convolve( sigmas, Views.extendMirrorSingle( img ), convolved5, ConvolverNumericType.factory( type ), factory );
 		ImageJFunctions.show( convolved5, "SeparableSymmetricConvolution with ConvolverNumericType"  );
 
-	    final Img< FloatType > convolved4 = factory.create( img, new FloatType() );
-	    convolve( sigmas, Views.extendMirrorSingle( img ), convolved4, ConvolverNativeType.factory( type ), factory, type );
+	    final Img< FloatType > convolved4 = factory.create( img );
+	    convolve( sigmas, Views.extendMirrorSingle( img ), convolved4, ConvolverNativeType.factory( type ), factory );
 		ImageJFunctions.show( convolved4, "SeparableSymmetricConvolution with ConvolverNativeType"  );
 
-	    final Img< FloatType > convolved6 = factory.create( img, new FloatType() );
-	    convolve( sigmas, Views.extendMirrorSingle( img ), convolved6, ConvolverNativeTypeBuffered.factory( type ), factory, type );
+	    final Img< FloatType > convolved6 = factory.create( img );
+	    convolve( sigmas, Views.extendMirrorSingle( img ), convolved6, ConvolverNativeTypeBuffered.factory( type ), factory );
 		ImageJFunctions.show( convolved6, "SeparableSymmetricConvolution with ConvolverNativeTypeBuffered"  );
 
-	    final Img< FloatType > convolved7 = factory.create( img, new FloatType() );
-	    convolve( sigmas, Views.extendMirrorSingle( img ), convolved7, FloatConvolverRealType.< FloatType, FloatType >factory(), factory, type );
+	    final Img< FloatType > convolved7 = factory.create( img );
+	    convolve( sigmas, Views.extendMirrorSingle( img ), convolved7, FloatConvolverRealType.< FloatType, FloatType >factory(), factory );
 		ImageJFunctions.show( convolved7, "SeparableSymmetricConvolution with"  );
 
-	    final Img< FloatType > convolved3 = factory.create( img, new FloatType() );
-	    convolve( sigmas, Views.extendMirrorSingle( img ), convolved3, FloatConvolverRealTypeBuffered.< FloatType, FloatType >factory(), factory, type );
+	    final Img< FloatType > convolved3 = factory.create( img );
+	    convolve( sigmas, Views.extendMirrorSingle( img ), convolved3, FloatConvolverRealTypeBuffered.< FloatType, FloatType >factory(), factory );
 		ImageJFunctions.show( convolved3, "SeparableSymmetricConvolution with FloatConvolverRealTypeBuffered"  );
 	}
 
@@ -294,10 +293,9 @@ public class Gauss3Benchmark
 
 	public static void benchmarkInFloat( final long[] dimensions, final double sigma, final boolean printIndividualTimes, final int numRuns) throws ImgIOException
 	{
-		final UnsignedByteType unsignedByteType = new UnsignedByteType();
-		final ArrayImgFactory< UnsignedByteType > factory = new ArrayImgFactory< UnsignedByteType >();
-	    final Img< UnsignedByteType > img = factory.create( dimensions, unsignedByteType );
-	    final Img< UnsignedByteType > convolved = factory.create( dimensions, unsignedByteType );
+		final ArrayImgFactory< UnsignedByteType > factory = new ArrayImgFactory<>( new UnsignedByteType() );
+	    final Img< UnsignedByteType > img = factory.create( dimensions );
+	    final Img< UnsignedByteType > convolved = factory.create( dimensions );
 	    fillRandomUnsignedByte( img );
 
 	    final int n = img.numDimensions();
@@ -305,8 +303,7 @@ public class Gauss3Benchmark
 	    for ( int d = 0; d < n; ++d )
 	    	sigmas[ d ] = sigma;
 
-	    final FloatType floatType = new FloatType();
-		final ArrayImgFactory< FloatType > floatFactory = new ArrayImgFactory< FloatType >();
+	    final ArrayImgFactory< FloatType > floatFactory = new ArrayImgFactory<>( new FloatType() );
 
 	    System.out.println( "convolve UnsignedByteType using Converters on source and target" );
 	    BenchmarkHelper.benchmarkAndPrint( numRuns, printIndividualTimes, new Runnable() {
@@ -314,12 +311,12 @@ public class Gauss3Benchmark
 			public void run()
 			{
 			    final ConvolverFactory< FloatType, FloatType > cff = FloatConvolverRealTypeBuffered.< FloatType, FloatType >factory();
-				final RandomAccessibleInterval< FloatType > rIn = new WriteConvertedRandomAccessibleInterval< UnsignedByteType, FloatType >( img, new RealFloatSamplerConverter< UnsignedByteType >() );
-				final RandomAccessibleInterval< FloatType > rOut = new WriteConvertedRandomAccessibleInterval< UnsignedByteType, FloatType >( convolved, new RealFloatSamplerConverter< UnsignedByteType >() );
+				final RandomAccessibleInterval< FloatType > rIn = new WriteConvertedRandomAccessibleInterval<>( img, new RealFloatSamplerConverter< UnsignedByteType >() );
+				final RandomAccessibleInterval< FloatType > rOut = new WriteConvertedRandomAccessibleInterval<>( convolved, new RealFloatSamplerConverter< UnsignedByteType >() );
 				final double[][] halfkernels = Gauss3.halfkernels( sigmas );
 				final int numthreads = Runtime.getRuntime().availableProcessors();
 				final ExecutorService service = Executors.newFixedThreadPool( numthreads );
-				SeparableSymmetricConvolution.convolve( halfkernels, Views.extendMirrorSingle( rIn ), rOut, cff, cff, cff, cff, floatFactory, floatType, service );
+				SeparableSymmetricConvolution.convolve( halfkernels, Views.extendMirrorSingle( rIn ), rOut, cff, cff, cff, cff, floatFactory, service );
 				service.shutdown();
 			}
 	    } );
@@ -336,7 +333,7 @@ public class Gauss3Benchmark
 				final double[][] halfkernels = Gauss3.halfkernels( sigmas );
 				final int numthreads = Runtime.getRuntime().availableProcessors();
 				final ExecutorService service = Executors.newFixedThreadPool( numthreads );
-				SeparableSymmetricConvolution.convolve( halfkernels, Views.extendMirrorSingle( img ), convolved, cif, cff, cfi, cii, floatFactory, floatType, service );
+				SeparableSymmetricConvolution.convolve( halfkernels, Views.extendMirrorSingle( img ), convolved, cif, cff, cfi, cii, floatFactory, service );
 				service.shutdown();
 			}
 	    } );

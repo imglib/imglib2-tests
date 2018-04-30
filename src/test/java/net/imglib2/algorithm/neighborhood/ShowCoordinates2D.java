@@ -96,9 +96,9 @@ public class ShowCoordinates2D
 	{
 		final int n = 2;
 		final long[] dimensions = new long[] { 5, 5 };
-		final ImgFactory< CoordinateType > f = new ListImgFactory< CoordinateType >();
 		final CoordinateType type = new CoordinateType( n );
-		final Img< CoordinateType > img = f.create( dimensions, type );
+		final ImgFactory< CoordinateType > f = new ListImgFactory<>( type );
+		final Img< CoordinateType > img = f.create( dimensions );
 		final Cursor< CoordinateType > c = img.localizingCursor();
 		while ( c.hasNext() )
 			c.next().setPosition( c );
@@ -113,7 +113,7 @@ public class ShowCoordinates2D
 //			System.out.println( nc.next() );
 
 		final Interval span = Intervals.createMinMax( -1, -1, 1, 1 );
-		final Cursor< Neighborhood< CoordinateType > > n3 = new RectangleNeighborhoodCursor< CoordinateType >( Views.interval( img, Intervals.expand( img, -1 ) ), span, RectangleNeighborhoodSkipCenter.< CoordinateType >factory() );
+		final Cursor< Neighborhood< CoordinateType > > n3 = new RectangleNeighborhoodCursor<>( Views.interval( img, Intervals.expand( img, -1 ) ), span, RectangleNeighborhoodSkipCenter.< CoordinateType >factory() );
 		while ( n3.hasNext() )
 		{
 			for ( final CoordinateType t : n3.next() )
