@@ -1,9 +1,14 @@
 language: java
 jdk: openjdk8
 branches:
-  only: master
+  only:
+  - master
+  - "/.*-[0-9]+\\..*/"
 install: true
 script: ".travis/build.sh"
+cache:
+  directories:
+  - "~/.m2/repository"
 env:
   global:
   - secure: aH3kWBQtZYc0Qtv97BMWks1ftJezRorNpBZDL9rL60SwpH+6dtfq9P4cE0whk3gZmHIDD6QJ5bVRNmD4RP1EqFZbVmKj76SXEe02KqGa5zglbVy0oWfNBS5djVrrv0iJvHLDBkXOZ9K4l3Pbuln1ELifNTGQ7rj51hnTjdKgpIw=
