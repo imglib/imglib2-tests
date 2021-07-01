@@ -9,6 +9,7 @@
 		<relativePath />
 	</parent>
 
+	<groupId>net.imglib2</groupId>
 	<artifactId>imglib2-tests</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 
