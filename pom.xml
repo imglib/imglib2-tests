@@ -3,9 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>net.imglib2</groupId>
-		<artifactId>pom-imglib2</artifactId>
-		<version>12.0.0</version>
+		<groupId>org.scijava</groupId>
+		<artifactId>pom-scijava</artifactId>
+		<version>28.0.0</version>
 		<relativePath />
 	</parent>
 
@@ -69,8 +69,8 @@ Jean-Yves Tinevez and Michael Zinsmaier.</license.copyrightOwners>
 		<url>https://github.com/imglib/imglib-tests/issues</url>
 	</issueManagement>
 	<ciManagement>
-		<system>Travis CI</system>
-		<url>https://travis-ci.org/imglib/imglib2-tests</url>
+		<system>GitHub Actions</system>
+		<url>https://github.com/imglib/imglib-tests/actions</url>
 	</ciManagement>
 
 	<repositories>
